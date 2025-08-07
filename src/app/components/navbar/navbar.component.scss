@@ -1,0 +1,32 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  height: 64px;
+  
+  &.scrolled {
+    @apply shadow-lg;
+    background: rgba(255, 255, 255, 0.98);
+  }
+  
+  &.elevated {
+    @apply shadow-md;
+  }
+}
+
+::ng-deep .mobile-menu-dropdown {
+  .mat-mdc-menu-panel {
+    @apply rounded-xl shadow-xl;
+    min-width: 200px;
+    margin-top: 8px;
+  }
+  
+  .mat-mdc-menu-item {
+    @apply flex items-center gap-3;
+  }
+}

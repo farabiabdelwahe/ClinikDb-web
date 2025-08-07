@@ -1,0 +1,117 @@
+<section class="pricing py-20 bg-gray-50" id="pricing">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">Medical Cabinet Solutions</h2>
+    <p class="text-xl text-center text-gray-600 mb-12">Choose the plan that fits your medical practice's needs</p>
+    
+    <!-- Promo Code Section -->
+    <div class="max-w-md mx-auto mb-12">
+      <mat-card class="p-6 shadow-lg">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">Have a referral code?</h3>
+        
+        <div *ngIf="!appliedPromoCode" class="flex gap-2">
+          <mat-form-field appearance="outline" class="flex-1">
+            <mat-label>Enter Promo Code</mat-label>
+            <input matInput [(ngModel)]="promoCode" placeholder="e.g., AGENT20" (keyup.enter)="applyPromoCode()">
+            <mat-icon matSuffix>local_offer</mat-icon>
+            <mat-hint>Enter the code provided by your referral agent</mat-hint>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="applyPromoCode()" class="h-14 mt-1">
+            Apply
+          </button>
+        </div>
+        
+        <div *ngIf="appliedPromoCode" class="bg-green-50 p-4 rounded-lg flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <mat-icon class="text-green-600">check_circle</mat-icon>
+            <div>
+              <p class="font-semibold text-green-800">Promo code applied!</p>
+              <p class="text-sm text-green-600">{{ appliedPromoCode }} - {{ discountPercentage }}% discount</p>
+            </div>
+          </div>
+          <button mat-icon-button (click)="removePromoCode()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+    
+    <!-- Pricing Cards -->
+    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <mat-card 
+        *ngFor="let plan of plans; trackBy: trackByPlan"
+        [class.border-2]="plan.highlighted"
+        [class.border-primary-500]="plan.highlighted"
+        [class.shadow-xl]="plan.highlighted"
+        class="relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+      >
+        <mat-chip *ngIf="plan.badge" class="absolute top-4 right-4" color="primary" selected>
+          {{ plan.badge }}
+        </mat-chip>
+        
+        <mat-card-content class="p-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ plan.name }}</h3>
+          <p class="text-gray-600 mb-6">{{ plan.description }}</p>
+          
+          <div class="mb-8">
+            <div class="flex items-baseline">
+              <span class="text-5xl font-bold text-gray-900">
+                <span *ngIf="plan.price === 0">Free</span>
+                <span *ngIf="plan.price > 0">${{ getDiscountedPrice(plan.price) }}</span>
+              </span>
+              <span *ngIf="plan.price > 0 && discountPercentage > 0" class="ml-2 text-lg text-gray-500 line-through">
+                ${{ plan.price }}
+              </span>
+              <span *ngIf="plan.price > 0" class="ml-2 text-gray-600">/{{ plan.period }}</span>
+            </div>
+            <p *ngIf="discountPercentage > 0 && plan.price > 0" class="text-sm text-green-600 mt-1">
+              You save ${{ plan.price - getDiscountedPrice(plan.price) }} with promo code
+            </p>
+          </div>
+          
+          <ul class="space-y-3 mb-8">
+            <li *ngFor="let feature of plan.features" class="flex items-start gap-3">
+              <mat-icon class="text-green-600 mt-0.5" style="font-size: 20px;">check_circle</mat-icon>
+              <span class="text-gray-700">{{ feature }}</span>
+            </li>
+          </ul>
+          
+          <button 
+            mat-raised-button 
+            [color]="plan.highlighted ? 'primary' : ''"
+            class="w-full py-3 text-lg"
+            (click)="subscribe(plan)"
+          >
+            {{ plan.buttonText }}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    
+    <!-- Footer Note -->
+    <div class="text-center mt-12">
+      <p class="text-gray-600">
+        Need a custom solution for multiple locations? 
+        <a href="#contact" class="text-primary-600 hover:text-primary-700 font-semibold">Contact our enterprise team</a>
+      </p>
+      <p class="text-sm text-gray-500 mt-4">
+        All plans include 24/7 support, regular updates, and HIPAA compliance
+      </p>
+    </div>
+    
+    <!-- Agent Commission Note -->
+    <div class="max-w-2xl mx-auto mt-8">
+      <mat-card class="bg-blue-50 border border-blue-200">
+        <mat-card-content class="p-4">
+          <div class="flex items-start gap-3">
+            <mat-icon class="text-blue-600 mt-1">info</mat-icon>
+            <div class="text-sm text-blue-800">
+              <p class="font-semibold mb-1">Referral Partner Program</p>
+              <p>When you use a referral code, your referring agent earns a commission for helping you discover our platform. 
+              It's our way of thanking healthcare professionals who recommend MedCabinet Pro to their colleagues.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>

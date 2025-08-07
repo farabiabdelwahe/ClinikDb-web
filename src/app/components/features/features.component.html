@@ -1,0 +1,16 @@
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">Powerful Features for Medical Platforms</h2>
+    <p class="section-subtitle">Everything you need to manage agent commissions effectively</p>
+    
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features; trackBy: trackByTitle">
+        <div class="feature-icon">
+          <lucide-icon [img]="feature.icon" size="48"></lucide-icon>
+        </div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>

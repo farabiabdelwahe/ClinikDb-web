@@ -1,0 +1,21 @@
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Simple steps to get your agent commission system running</p>
+    
+    <div class="steps-container">
+      <div 
+        class="step" 
+        *ngFor="let step of steps; trackBy: trackByStep; let isLast = last"
+        [class.last-step]="isLast"
+      >
+        <div class="step-number">{{ step.number }}</div>
+        <div class="step-content">
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+        <div class="step-connector" *ngIf="!isLast"></div>
+      </div>
+    </div>
+  </div>
+</section>

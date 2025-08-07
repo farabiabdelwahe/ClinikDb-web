@@ -1,0 +1,112 @@
+<section class="hero min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
+  <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+  
+  <div class="container mx-auto px-4 py-20 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Hero Text -->
+      <div class="hero-content space-y-8 animate-fade-in">
+        <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+          <span class="text-primary-600">Transform</span> Your<br>
+          Medical Practice<br>
+          Management
+        </h1>
+        
+        <p class="text-xl text-gray-600 leading-relaxed">
+          Empower your medical cabinet with our comprehensive digital platform. 
+          Manage patient records, streamline appointments, track treatments, and 
+          optimize your practice operations - all in one secure, HIPAA-compliant solution.
+        </p>
+        
+        <div class="flex flex-wrap gap-4">
+          <button mat-raised-button color="primary" class="px-8 py-3 text-lg" (click)="scrollToSection('pricing')">
+            <mat-icon class="mr-2">local_hospital</mat-icon>
+            Start Your Free Trial
+          </button>
+          <button mat-stroked-button color="primary" class="px-8 py-3 text-lg" (click)="scrollToSection('how-it-works')">
+            <mat-icon class="mr-2">play_circle</mat-icon>
+            Watch Demo
+          </button>
+        </div>
+        
+        <!-- Trust Indicators -->
+        <div class="flex items-center gap-8 pt-8 border-t border-gray-200">
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-green-600">verified</mat-icon>
+            <span class="text-sm text-gray-600">HIPAA Compliant</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-green-600">security</mat-icon>
+            <span class="text-sm text-gray-600">Bank-level Security</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hero Stats Card -->
+      <div class="hero-visual relative">
+        <div class="absolute -inset-4 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-2xl opacity-20 blur-2xl animate-pulse"></div>
+        
+        <mat-card class="relative bg-white/90 backdrop-blur-xl shadow-2xl rounded-2xl p-8">
+          <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Trusted by Healthcare Professionals</h3>
+          
+          <div class="grid grid-cols-1 gap-6">
+            <div class="stat-item text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100">
+              <mat-icon class="text-primary-600 mb-2" style="font-size: 36px; height: 36px; width: 36px;">medical_services</mat-icon>
+              <div class="text-3xl font-bold text-gray-900">
+                <om-number-ticker
+                  [countTo]="doctorCount"
+                  [countDuration]="1500"
+                  [transformFunction]="formatNumber"
+                  styleClass="inline-block"
+                ></om-number-ticker>+
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Medical Professionals</p>
+            </div>
+            
+            <div class="stat-item text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100">
+              <mat-icon class="text-secondary-600 mb-2" style="font-size: 36px; height: 36px; width: 36px;">people</mat-icon>
+              <div class="text-3xl font-bold text-gray-900">
+                <om-number-ticker
+                  [countTo]="patientCount"
+                  [countDuration]="2000"
+                  [transformFunction]="formatNumber"
+                  styleClass="inline-block"
+                ></om-number-ticker>+
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Patients Managed</p>
+            </div>
+            
+            <div class="stat-item text-center p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100">
+              <mat-icon class="text-green-600 mb-2" style="font-size: 36px; height: 36px; width: 36px;">event</mat-icon>
+              <div class="text-3xl font-bold text-gray-900">
+                <om-number-ticker
+                  [countTo]="appointmentCount"
+                  [countDuration]="1800"
+                  [transformFunction]="formatNumber"
+                  styleClass="inline-block"
+                ></om-number-ticker>+
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Appointments Managed</p>
+            </div>
+          </div>
+          
+          <div class="mt-8 text-center">
+            <p class="text-sm text-gray-500">Trusted by healthcare professionals worldwide</p>
+            <div class="flex justify-center items-center gap-1 mt-2">
+              <mat-icon class="text-yellow-500" style="font-size: 20px;">star</mat-icon>
+              <mat-icon class="text-yellow-500" style="font-size: 20px;">star</mat-icon>
+              <mat-icon class="text-yellow-500" style="font-size: 20px;">star</mat-icon>
+              <mat-icon class="text-yellow-500" style="font-size: 20px;">star</mat-icon>
+              <mat-icon class="text-yellow-500" style="font-size: 20px;">star</mat-icon>
+              <span class="text-sm text-gray-600 ml-2">4.9/5 (500+ reviews)</span>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Decorative Elements -->
+  <div class="absolute top-20 left-10 w-72 h-72 bg-primary-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+  <div class="absolute top-40 right-10 w-72 h-72 bg-secondary-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+  <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+</section>
