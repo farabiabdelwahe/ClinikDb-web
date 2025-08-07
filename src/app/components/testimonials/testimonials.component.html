@@ -1,27 +1,78 @@
-<section class="testimonials">
-  <div class="container">
-    <h2 class="section-title">Trusted by Medical Platforms</h2>
-    <p class="section-subtitle">See what our customers say about our commission management platform</p>
+<section class="testimonials-section" id="testimonials">
+  <div class="testimonials-container">
+    <!-- Header -->
+    <div class="testimonials-header">
+      <span class="section-badge">Testimonials</span>
+      <h2 class="section-title">Trusted by Healthcare Professionals</h2>
+      <p class="section-subtitle">
+        Discover why medical practices choose MedCabinet Pro for their management needs
+      </p>
+    </div>
     
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Customer Satisfaction</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Medical Practices</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">4.9/5</div>
+        <div class="stat-label">Average Rating</div>
+      </div>
+    </div>
+    
+    <!-- Testimonials Grid -->
     <div class="testimonials-grid">
-      <div 
-        class="testimonial-card" 
-        *ngFor="let testimonial of testimonials; trackBy: trackByAuthor"
+      <mat-card 
+        class="testimonial-card"
+        *ngFor="let testimonial of testimonials; trackBy: trackByAuthor; let i = index"
+        [class.featured]="i === 1"
       >
+        <!-- Quote Icon -->
         <div class="quote-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-            <path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.318.142-.686.238-1.024.472-.337.25-.718.4-1.091.692-.36.297-.736.24-1.042.82-.295.647-.474 1.082-.65 1.887-.15.826-.22 1.66-.22 2.5 0 .69.06 1.36.22 2.5.22 1.89.78 3.46 1.65 4.69.87 1.23 2.01 2.14 3.42 2.73.69.29 1.44.44 2.25.44.81 0 1.56-.15 2.25-.44 1.41-.59 2.55-1.5 3.42-2.73.87-1.23 1.43-2.8 1.65-4.69.16-1.14.22-1.81.22-2.5s-.06-1.36-.22-2.5c-.22-1.89-.78-3.46-1.65-4.69-.87-1.23-2.01-2.14-3.42-2.73-.69-.29-1.44-.44-2.25-.44z" fill="currentColor"/>
-            <path d="M17.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35l.539-.222.474-.197-.485-1.938-.597.144c-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.318.142-.686.238-1.024.472-.337.25-.718.4-1.091.692-.36.297-.736.24-1.042.82-.295.647-.474 1.082-.65 1.887-.15.826-.22 1.66-.22 2.5 0 .69.06 1.36.22 2.5.22 1.89.78 3.46 1.65 4.69.87 1.23 2.01 2.14 3.42 2.73.69.29 1.44.44 2.25.44.81 0 1.56-.15 2.25-.44 1.41-.59 2.55-1.5 3.42-2.73.87-1.23 1.43-2.8 1.65-4.69.16-1.14.22-1.81.22-2.5s-.06-1.36-.22-2.5c-.22-1.89-.78-3.46-1.65-4.69-.87-1.23-2.01-2.14-3.42-2.73-.69-.29-1.44-.44-2.25-.44z" fill="currentColor"/>
-          </svg>
+          <lucide-angular [img]="Quote" size="24"></lucide-angular>
         </div>
         
+        <!-- Rating -->
+        <div class="rating">
+          <ng-container *ngFor="let star of getStarArray(testimonial.rating)">
+            <lucide-angular 
+              *ngIf="star === 'full'" 
+              [img]="Star" 
+              size="16" 
+              class="star-icon filled"
+            ></lucide-angular>
+            <lucide-angular 
+              *ngIf="star === 'half'" 
+              [img]="StarHalf" 
+              size="16" 
+              class="star-icon filled"
+            ></lucide-angular>
+            <mat-icon 
+              *ngIf="star === 'empty'" 
+              class="star-icon empty"
+            >star_outline</mat-icon>
+          </ng-container>
+        </div>
+        
+        <!-- Content -->
         <div class="testimonial-content">
-          <p class="quote">{{ testimonial.quote }}</p>
+          <p class="quote-text">{{ testimonial.quote }}</p>
+          <p class="quote-highlight" *ngIf="testimonial.highlight">
+            "{{ testimonial.highlight }}"
+          </p>
         </div>
         
-        <div class="testimonial-author">
+        <!-- Author -->
+        <div class="testimonial-footer">
           <div class="author-avatar">
-            <span>{{ getAuthorInitials(testimonial.author.name) }}</span>
+            <span class="avatar-text">{{ getAuthorInitials(testimonial.author.name) }}</span>
           </div>
           <div class="author-info">
             <h4 class="author-name">{{ testimonial.author.name }}</h4>
@@ -29,7 +80,24 @@
             <p class="author-company">{{ testimonial.author.company }}</p>
           </div>
         </div>
-      </div>
+      </mat-card>
+    </div>
+    
+    <!-- CTA Section -->
+    <div class="testimonials-cta">
+      <mat-card class="cta-card">
+        <div class="cta-content">
+          <mat-icon class="cta-icon">medical_services</mat-icon>
+          <div class="cta-text">
+            <h3>Join 500+ Medical Practices</h3>
+            <p>Start your 7-day free trial and experience the difference</p>
+          </div>
+          <button class="cta-button" (click)="scrollToSection('pricing')">
+            Start Free Trial
+            <mat-icon class="button-icon">arrow_forward</mat-icon>
+          </button>
+        </div>
+      </mat-card>
     </div>
   </div>
 </section>

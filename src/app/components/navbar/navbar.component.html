@@ -1,62 +1,84 @@
-<mat-toolbar class="navbar" [class.scrolled]="isScrolled" [class.elevated]="isScrolled">
-  <div class="navbar-container w-full max-w-7xl mx-auto px-4 flex items-center justify-between">
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="navbar-container">
     <!-- Logo/Brand -->
-    <div class="navbar-brand flex items-center gap-2 cursor-pointer" (click)="scrollToTop()">
-      <mat-icon class="text-primary-600" style="font-size: 32px; height: 32px; width: 32px;">local_hospital</mat-icon>
-      <span class="text-xl font-bold text-gray-900">MedCabinet Pro</span>
+    <div class="navbar-brand" (click)="scrollToTop()">
+      <div class="logo-wrapper">
+        <lucide-angular [img]="Activity" size="28" class="logo-icon"></lucide-angular>
+      </div>
+      <span class="brand-text">MedCabinet<span class="brand-highlight">Pro</span></span>
     </div>
 
     <!-- Desktop Navigation -->
-    <nav class="hidden md:flex items-center gap-8">
-      <button mat-button class="text-gray-700 hover:text-primary-600 transition-colors" (click)="scrollToSection('features')">
-        Features
+    <div class="desktop-nav">
+      <button 
+        *ngFor="let item of navItems"
+        class="nav-link"
+        [class.active]="activeSection === item.section"
+        (click)="scrollToSection(item.section)"
+      >
+        {{ item.label }}
+        <span class="nav-indicator"></span>
       </button>
-      <button mat-button class="text-gray-700 hover:text-primary-600 transition-colors" (click)="scrollToSection('how-it-works')">
-        How it Works
-      </button>
-      <button mat-button class="text-gray-700 hover:text-primary-600 transition-colors" (click)="scrollToSection('pricing')">
-        Pricing
-      </button>
-      <button mat-button class="text-gray-700 hover:text-primary-600 transition-colors" (click)="scrollToSection('testimonials')">
-        Testimonials
-      </button>
-    </nav>
+    </div>
 
-    <!-- CTA Button -->
-    <div class="hidden md:block">
-      <button mat-raised-button color="primary" class="px-6 py-2" (click)="scrollToSection('pricing')">
+    <!-- CTA Section -->
+    <div class="nav-actions">
+      <button class="demo-button">
+        Book Demo
+      </button>
+      <button class="cta-button" (click)="scrollToSection('pricing')">
         Get Started
+        <lucide-angular [img]="ChevronRight" size="16" class="cta-icon"></lucide-angular>
       </button>
     </div>
 
     <!-- Mobile Menu Toggle -->
-    <button mat-icon-button class="md:hidden" [matMenuTriggerFor]="mobileMenu">
-      <mat-icon>menu</mat-icon>
+    <button class="mobile-toggle" (click)="toggleMobileMenu()">
+      <lucide-angular [img]="isMobileMenuOpen ? X : Menu" size="24"></lucide-angular>
     </button>
   </div>
-</mat-toolbar>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-overlay" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
 
 <!-- Mobile Menu -->
-<mat-menu #mobileMenu="matMenu" class="mobile-menu-dropdown">
-  <button mat-menu-item (click)="scrollToSection('features')">
-    <mat-icon>features</mat-icon>
-    <span>Features</span>
-  </button>
-  <button mat-menu-item (click)="scrollToSection('how-it-works')">
-    <mat-icon>build</mat-icon>
-    <span>How it Works</span>
-  </button>
-  <button mat-menu-item (click)="scrollToSection('pricing')">
-    <mat-icon>attach_money</mat-icon>
-    <span>Pricing</span>
-  </button>
-  <button mat-menu-item (click)="scrollToSection('testimonials')">
-    <mat-icon>star</mat-icon>
-    <span>Testimonials</span>
-  </button>
-  <div class="px-3 py-2">
-    <button mat-raised-button color="primary" class="w-full" (click)="scrollToSection('pricing')">
-      Get Started
-    </button>
+<div class="mobile-menu" [class.open]="isMobileMenuOpen" [@slideIn]>
+  <div class="mobile-menu-content">
+    <div class="mobile-menu-header">
+      <div class="mobile-brand">
+        <lucide-angular [img]="Activity" size="24" class="logo-icon"></lucide-angular>
+        <span>MedCabinet<span class="brand-highlight">Pro</span></span>
+      </div>
+      <button class="mobile-close" (click)="closeMobileMenu()">
+        <lucide-angular [img]="X" size="24"></lucide-angular>
+      </button>
+    </div>
+    
+    <nav class="mobile-nav">
+      <button 
+        *ngFor="let item of navItems"
+        class="mobile-nav-item"
+        [class.active]="activeSection === item.section"
+        (click)="scrollToSection(item.section)"
+      >
+        <mat-icon class="mobile-nav-icon">{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+        <lucide-angular [img]="ChevronRight" size="16" class="mobile-nav-arrow"></lucide-angular>
+      </button>
+    </nav>
+    
+    <div class="mobile-actions">
+      <button class="mobile-demo-button">
+        Book Demo
+      </button>
+      <button class="mobile-cta-button" (click)="scrollToSection('pricing')">
+        Get Started
+      </button>
+    </div>
+    
+    <div class="mobile-footer">
+      <p>© 2024 MedCabinet Pro. All rights reserved.</p>
+    </div>
   </div>
-</mat-menu>
+</div>
