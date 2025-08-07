@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Check } from 'lucide-angular';
+import { LucideAngularModule, Check, Sparkles, Rocket, Crown, Tag, Gift, CheckCircle, X } from 'lucide-angular';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface PricingPlan {
   name: string;
@@ -19,6 +21,8 @@ interface PricingPlan {
   highlighted: boolean;
   buttonText: string;
   badge?: string;
+  icon?: any;
+  gradient?: string;
 }
 
 @Component({
@@ -34,13 +38,22 @@ interface PricingPlan {
     MatIconModule,
     MatChipsModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatBadgeModule,
+    MatDividerModule
   ],
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
 })
 export class PricingComponent {
   readonly Check = Check;
+  readonly Sparkles = Sparkles;
+  readonly Rocket = Rocket;
+  readonly Crown = Crown;
+  readonly Tag = Tag;
+  readonly Gift = Gift;
+  readonly CheckCircle = CheckCircle;
+  readonly X = X;
   promoCode: string = '';
   appliedPromoCode: string = '';
   discountPercentage: number = 0;
@@ -61,7 +74,9 @@ export class PricingComponent {
         'Data export'
       ],
       highlighted: false,
-      buttonText: 'Start 7-Day Trial'
+      buttonText: 'Start 7-Day Trial',
+      icon: this.Sparkles,
+      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     },
     {
       name: 'Annual Plan',
@@ -81,7 +96,9 @@ export class PricingComponent {
       ],
       highlighted: true,
       buttonText: 'Get Started',
-      badge: 'Most Popular'
+      badge: 'Most Popular',
+      icon: this.Rocket,
+      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
     },
     {
       name: 'Pro Annual',
@@ -101,7 +118,9 @@ export class PricingComponent {
         '24/7 phone support'
       ],
       highlighted: false,
-      buttonText: 'Upgrade to Pro'
+      buttonText: 'Upgrade to Pro',
+      icon: this.Crown,
+      gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
     }
   ];
 
