@@ -132,6 +132,31 @@
     display: flex;
   }
   
+  .lang-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+    
+    .lang-code {
+      font-size: 13px;
+      font-weight: 700;
+    }
+  }
+  
   .demo-button {
     padding: 8px 20px;
     background: transparent;
@@ -389,6 +414,141 @@
       color: #94a3b8;
       text-align: center;
       margin: 0;
+    }
+  }
+}
+
+// Language Menu Styles
+::ng-deep .language-menu {
+  .mat-mdc-menu-panel {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-width: 180px;
+  }
+  
+  .mat-mdc-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    
+    &.active {
+      background: rgba(99, 102, 241, 0.08);
+      color: #6366f1;
+    }
+    
+    &:hover {
+      background: #f8fafc;
+    }
+    
+    .lang-flag {
+      font-size: 20px;
+    }
+    
+    .lang-name {
+      flex: 1;
+      font-weight: 500;
+    }
+    
+    .check-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #6366f1;
+    }
+  }
+}
+
+// Mobile Language Selector
+.mobile-language-selector {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+  
+  .language-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  
+  .language-options {
+    display: flex;
+    gap: 8px;
+    
+    .language-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+      }
+      
+      &.active {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-color: #6366f1;
+        color: #6366f1;
+      }
+      
+      .lang-flag {
+        font-size: 18px;
+      }
+      
+      .lang-name {
+        @media (max-width: 360px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// RTL Support
+:host-context(.rtl) {
+  .navbar-container {
+    direction: rtl;
+  }
+  
+  .nav-link,
+  .mobile-nav-item {
+    direction: rtl;
+    
+    .nav-indicator {
+      direction: ltr;
+    }
+  }
+  
+  .mobile-menu {
+    right: auto;
+    left: -100%;
+    
+    &.open {
+      left: 0;
+    }
+  }
+  
+  .cta-icon,
+  .mobile-nav-arrow {
+    transform: rotate(180deg);
+    
+    &:hover {
+      transform: rotate(180deg) translateX(-2px);
     }
   }
 }

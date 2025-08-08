@@ -1,0 +1,183 @@
+{
+  "navbar": {
+   "brand": "Clinik",
+    "brandSuffix": "db",
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "pricing": "Tarifs",
+    "testimonials": "Témoignages",
+    "bookDemo": "Réserver une démo",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "title": "Transformez Votre Cabinet Médical",
+    "subtitle": "avec l'Excellence Numérique",
+    "description": "Simplifiez la gestion des patients, les rendez-vous et la facturation avec notre solution complète de cabinet médical conçue pour les professionnels de santé modernes.",
+    "cta": {
+      "startTrial": "Essai Gratuit",
+      "watchDemo": "Voir la Démo"
+    },
+    "stats": {
+      "practices": "Cabinets Médicaux",
+      "patients": "Patients Gérés",
+      "uptime": "Disponibilité"
+    }
+  },
+  "features": {
+    "title": "Tout ce dont vous avez besoin pour gérer votre cabinet",
+    "subtitle": "Outils complets conçus pour les professionnels de santé modernes",
+    "items": {
+      "patientRecords": {
+        "title": "Dossiers Patients",
+        "description": "Dossiers patients numériques sécurisés avec accès instantané à l'historique médical, aux traitements et aux ordonnances"
+      },
+      "appointments": {
+        "title": "Planification Intelligente",
+        "description": "Réservation automatique de rendez-vous avec rappels, synchronisation du calendrier et portail libre-service pour les patients"
+      },
+      "billing": {
+        "title": "Facturation & Assurance",
+        "description": "Processus de facturation simplifié avec gestion des réclamations d'assurance et suivi automatique des paiements"
+      },
+      "analytics": {
+        "title": "Tableau de Bord Analytique",
+        "description": "Aperçus en temps réel des performances du cabinet, du flux de patients et des métriques financières"
+      },
+      "telemedicine": {
+        "title": "Télémédecine Intégrée",
+        "description": "Plateforme de consultation vidéo intégrée pour les soins et suivis à distance"
+      },
+      "security": {
+        "title": "Conforme HIPAA",
+        "description": "Sécurité de niveau bancaire avec conformité HIPAA complète et stockage de données crypté"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Solutions Cabinet Médical",
+    "subtitle": "Choisissez le plan qui correspond aux besoins de votre cabinet médical",
+    "referral": {
+      "title": "Avez-vous un code de parrainage?",
+      "placeholder": "Entrez le code promo",
+      "example": "ex., AGENT20",
+      "hint": "Entrez le code fourni par votre agent de parrainage",
+      "applyButton": "Appliquer",
+      "applied": "Code promo appliqué!",
+      "discount": "Réduction de {{percentage}}%",
+      "info": "Les codes de parrainage vous aident à économiser et soutiennent les professionnels de santé de notre réseau"
+    },
+    "plans": {
+      "free": {
+        "name": "Essai Gratuit",
+        "period": "7 jours",
+        "description": "Essayez notre plateforme sans risque pendant 7 jours",
+        "buttonText": "Commencer l'essai de 7 jours"
+      },
+      "annual": {
+        "name": "Plan Annuel",
+        "period": "année",
+        "description": "Solution complète pour cabinets médicaux",
+        "buttonText": "Commencer",
+        "badge": "Le Plus Populaire"
+      },
+      "pro": {
+        "name": "Pro Annuel",
+        "period": "année",
+        "description": "Fonctionnalités avancées pour les cabinets en croissance",
+        "buttonText": "Passer à Pro"
+      }
+    },
+    "features": {
+      "patientRecords": "dossiers patients",
+      "unlimited": "Illimités",
+      "upTo": "Jusqu'à {{count}}",
+      "scheduling": "planification de rendez-vous",
+      "basic": "Basique",
+      "advanced": "Avancée",
+      "support": "support",
+      "email": "Email",
+      "priority": "Prioritaire",
+      "reporting": "rapports",
+      "standard": "Standard",
+      "custom": "Personnalisé",
+      "mobileApp": "Accès application mobile",
+      "dataExport": "Export de données",
+      "apiIntegrations": "Intégrations API",
+      "automatedWorkflows": "Flux de travail automatisés",
+      "analytics": "Tableau de bord analytique",
+      "dataBackup": "Sauvegarde et sécurité des données",
+      "multiLocation": "Support multi-sites",
+      "accountManager": "Gestionnaire de compte dédié",
+      "whiteLabel": "Options marque blanche",
+      "hipaaTools": "Outils de conformité HIPAA",
+      "advancedReporting": "Rapports avancés",
+      "featureRequests": "Demandes de fonctionnalités prioritaires",
+      "phoneSupport": "Support téléphonique 24/7",
+      "everything": "Tout du Plan Annuel"
+    },
+    "footer": {
+      "enterprise": "Besoin d'une solution personnalisée pour plusieurs sites?",
+      "contactTeam": "Contactez notre équipe entreprise",
+      "included": "Tous les plans incluent support 24/7, mises à jour régulières et conformité HIPAA"
+    },
+    "partner": {
+      "title": "Programme de Partenariat de Parrainage",
+      "description": "Lorsque vous utilisez un code de parrainage, votre agent parrain gagne une commission pour vous avoir fait découvrir notre plateforme. C'est notre façon de remercier les professionnels de santé qui recommandent MedCabinet Pro à leurs collègues."
+    },
+    "save": "Économisez {{amount}}$ avec le code promo"
+  },
+  "testimonials": {
+    "badge": "Témoignages",
+    "title": "Approuvé par les Professionnels de Santé",
+    "subtitle": "Découvrez pourquoi les cabinets médicaux choisissent MedCabinet Pro pour leurs besoins de gestion",
+    "stats": {
+      "satisfaction": "Satisfaction Client",
+      "practices": "Cabinets Médicaux",
+      "rating": "Note Moyenne"
+    },
+    "cta": {
+      "title": "Rejoignez plus de 500 Cabinets Médicaux",
+      "subtitle": "Commencez votre essai gratuit de 7 jours et découvrez la différence",
+      "button": "Commencer l'Essai Gratuit"
+    }
+  },
+  "footer": {
+    "company": {
+      "title": "Entreprise",
+      "about": "À Propos",
+      "careers": "Carrières",
+      "press": "Presse",
+      "contact": "Contact"
+    },
+    "product": {
+      "title": "Produit",
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "security": "Sécurité",
+      "updates": "Mises à jour"
+    },
+    "resources": {
+      "title": "Ressources",
+      "blog": "Blog",
+      "documentation": "Documentation",
+      "support": "Centre d'Aide",
+      "status": "État du Système"
+    },
+    "legal": {
+      "title": "Légal",
+      "privacy": "Politique de Confidentialité",
+      "terms": "Conditions d'Utilisation",
+      "hipaa": "Conformité HIPAA",
+      "cookies": "Politique de Cookies"
+    },
+    "newsletter": {
+      "title": "Restez Informé",
+      "description": "Recevez les dernières mises à jour et conseils pour cabinets médicaux",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner"
+    },
+    "copyright": "© 2024 MedCabinet Pro. Tous droits réservés.",
+    "madeWith": "Fait avec",
+    "for": "pour les professionnels de santé"
+  }
+}

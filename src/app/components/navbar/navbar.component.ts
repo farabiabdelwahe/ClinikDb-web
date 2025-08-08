@@ -1,17 +1,19 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Activity, Menu, X, ChevronRight } from 'lucide-angular';
+import { LucideAngularModule, Activity, Menu, X, ChevronRight, Globe } from 'lucide-angular';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { TranslationService, Language } from '../../services/translation.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatBadgeModule],
+  imports: [CommonModule, LucideAngularModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatBadgeModule, TranslatePipe],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   animations: [
@@ -27,6 +29,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  translationService = inject(TranslationService);
+  private cdr = inject(ChangeDetectorRef);
+  
   isScrolled = false;
   isMobileMenuOpen = false;
   activeSection = 'home';
@@ -35,12 +40,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   readonly Menu = Menu;
   readonly X = X;
   readonly ChevronRight = ChevronRight;
+  readonly Globe = Globe;
+  
+  languages: Language[] = [];
+  currentLanguage: Language | undefined;
   
   navItems = [
-    { label: 'Features', section: 'features', icon: 'dashboard' },
-    { label: 'How it Works', section: 'how-it-works', icon: 'build' },
-    { label: 'Pricing', section: 'pricing', icon: 'attach_money' },
-    { label: 'Testimonials', section: 'testimonials', icon: 'star' }
+    { labelKey: 'navbar.features', section: 'features', icon: 'dashboard' },
+    { labelKey: 'navbar.howItWorks', section: 'how-it-works', icon: 'build' },
+    { labelKey: 'navbar.pricing', section: 'pricing', icon: 'attach_money' },
+    { labelKey: 'navbar.testimonials', section: 'testimonials', icon: 'star' }
   ];
 
   private scrollListener = () => {
@@ -50,6 +59,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     window.addEventListener('scroll', this.scrollListener);
     this.checkActiveSection();
+    
+    this.languages = this.translationService.languages;
+    this.currentLanguage = this.translationService.getCurrentLanguage();
+    
+    // Subscribe to language changes
+    this.translationService.currentLang$.subscribe(() => {
+      this.currentLanguage = this.translationService.getCurrentLanguage();
+    });
+    
+    // Ensure translations are ready
+    this.translationService.isReady$.subscribe((ready) => {
+      if (ready) {
+        this.currentLanguage = this.translationService.getCurrentLanguage();
+      }
+    });
   }
   
   @HostListener('window:scroll')
@@ -100,5 +124,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   scrollToTop(): void {
     this.closeMobileMenu();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  async changeLanguage(langCode: string): Promise<void> {
+    console.log('Changing language to:', langCode);
+    await this.translationService.setLanguage(langCode);
+    this.currentLanguage = this.translationService.getCurrentLanguage();
+    this.cdr.detectChanges();
   }
 }

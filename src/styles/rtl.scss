@@ -1,0 +1,172 @@
+// RTL Support Styles
+body.rtl {
+  direction: rtl;
+  text-align: right;
+  
+  // Typography adjustments
+  h1, h2, h3, h4, h5, h6, p, span, div {
+    direction: rtl;
+    text-align: inherit;
+  }
+  
+  // Flexbox adjustments
+  .flex,
+  .flex-row {
+    flex-direction: row-reverse;
+  }
+  
+  // Grid adjustments
+  .grid {
+    direction: rtl;
+  }
+  
+  // Margin and padding utilities
+  .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  
+  .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+  
+  // Icons and buttons
+  button,
+  a {
+    .icon-left {
+      margin-left: 8px;
+      margin-right: 0;
+    }
+    
+    .icon-right {
+      margin-right: 8px;
+      margin-left: 0;
+    }
+  }
+  
+  // Material components
+  .mat-mdc-form-field {
+    text-align: right;
+    
+    .mat-mdc-form-field-infix {
+      direction: rtl;
+    }
+  }
+  
+  .mat-mdc-button,
+  .mat-mdc-raised-button {
+    .mat-icon {
+      &:first-child {
+        margin-left: 8px;
+        margin-right: -4px;
+      }
+      
+      &:last-child {
+        margin-right: 8px;
+        margin-left: -4px;
+      }
+    }
+  }
+  
+  // Cards and containers
+  .mat-mdc-card {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  // Lists
+  ul, ol {
+    padding-right: 20px;
+    padding-left: 0;
+  }
+  
+  // Animations
+  @keyframes slideInRight {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  // Pricing cards
+  .pricing-card {
+    .features-list {
+      .feature-item {
+        flex-direction: row-reverse;
+        
+        .feature-icon {
+          margin-right: 0;
+          margin-left: 12px;
+        }
+      }
+    }
+  }
+  
+  // Testimonials
+  .testimonial-card {
+    .testimonial-footer {
+      flex-direction: row-reverse;
+      
+      .author-avatar {
+        margin-right: 0;
+        margin-left: 16px;
+      }
+    }
+    
+    .quote-highlight {
+      padding-right: 16px;
+      padding-left: 0;
+      border-right: 3px solid #6366f1;
+      border-left: none;
+    }
+  }
+  
+  // Navigation
+  .navbar {
+    .navbar-brand {
+      flex-direction: row-reverse;
+      
+      .logo-wrapper {
+        margin-left: 12px;
+        margin-right: 0;
+      }
+    }
+    
+    .nav-actions {
+      flex-direction: row-reverse;
+    }
+  }
+  
+  // Forms
+  .promo-input-group {
+    flex-direction: row-reverse;
+  }
+  
+  // Stats
+  .stats-bar {
+    flex-direction: row-reverse;
+  }
+  
+  // Footer
+  .footer {
+    .footer-grid {
+      direction: rtl;
+    }
+    
+    .social-links {
+      flex-direction: row-reverse;
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "navbar": {
+    "brand": "Clinik",
+    "brandSuffix": "db",
+    "features": "Features",
+    "howItWorks": "How it Works",
+    "pricing": "Pricing",
+    "testimonials": "Testimonials",
+    "bookDemo": "Book Demo",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "title": "Transform Your Medical Practice",
+    "subtitle": "with Digital Excellence",
+    "description": "Streamline patient management, appointments, and billing with our comprehensive medical cabinet solution designed for modern healthcare providers.",
+    "cta": {
+      "startTrial": "Start Free Trial",
+      "watchDemo": "Watch Demo"
+    },
+    "stats": {
+      "practices": "Medical Practices",
+      "patients": "Patients Managed",
+      "uptime": "Uptime"
+    }
+  },
+  "features": {
+    "title": "Everything You Need to Run Your Practice",
+    "subtitle": "Comprehensive tools designed for modern medical professionals",
+    "items": {
+      "patientRecords": {
+        "title": "Patient Records",
+        "description": "Secure, digital patient records with instant access to medical history, treatments, and prescriptions"
+      },
+      "appointments": {
+        "title": "Smart Scheduling",
+        "description": "Automated appointment booking with reminders, calendar sync, and patient self-service portal"
+      },
+      "billing": {
+        "title": "Billing & Insurance",
+        "description": "Streamlined billing process with insurance claim management and automated payment tracking"
+      },
+      "analytics": {
+        "title": "Analytics Dashboard",
+        "description": "Real-time insights into practice performance, patient flow, and financial metrics"
+      },
+      "telemedicine": {
+        "title": "Telemedicine Ready",
+        "description": "Integrated video consultation platform for remote patient care and follow-ups"
+      },
+      "security": {
+        "title": "HIPAA Compliant",
+        "description": "Bank-level security with full HIPAA compliance and encrypted data storage"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Medical Cabinet Solutions",
+    "subtitle": "Choose the plan that fits your medical practice's needs",
+    "referral": {
+      "title": "Have a referral code?",
+      "placeholder": "Enter Promo Code",
+      "example": "e.g., AGENT20",
+      "hint": "Enter the code provided by your referral agent",
+      "applyButton": "Apply Code",
+      "applied": "Promo code applied!",
+      "discount": "{{percentage}}% discount",
+      "info": "Referral codes help you save and support healthcare professionals in our network"
+    },
+    "plans": {
+      "free": {
+        "name": "Free Trial",
+        "period": "7 days",
+        "description": "Try our platform risk-free for 7 days",
+        "buttonText": "Start 7-Day Trial"
+      },
+      "annual": {
+        "name": "Annual Plan",
+        "period": "year",
+        "description": "Complete solution for medical cabinets",
+        "buttonText": "Get Started",
+        "badge": "Most Popular"
+      },
+      "pro": {
+        "name": "Pro Annual",
+        "period": "year",
+        "description": "Advanced features for growing practices",
+        "buttonText": "Upgrade to Pro"
+      }
+    },
+    "features": {
+      "patientRecords": "patient records",
+      "unlimited": "Unlimited",
+      "upTo": "Up to {{count}}",
+      "scheduling": "appointment scheduling",
+      "basic": "Basic",
+      "advanced": "Advanced",
+      "support": "support",
+      "email": "Email",
+      "priority": "Priority",
+      "reporting": "reporting",
+      "standard": "Standard",
+      "custom": "Custom",
+      "mobileApp": "Mobile app access",
+      "dataExport": "Data export",
+      "apiIntegrations": "API integrations",
+      "automatedWorkflows": "Automated workflows",
+      "analytics": "Analytics dashboard",
+      "dataBackup": "Data backup & security",
+      "multiLocation": "Multi-location support",
+      "accountManager": "Dedicated account manager",
+      "whiteLabel": "White-label options",
+      "hipaaTools": "HIPAA compliance tools",
+      "advancedReporting": "Advanced reporting",
+      "featureRequests": "Priority feature requests",
+      "phoneSupport": "24/7 phone support",
+      "everything": "Everything in Annual Plan"
+    },
+    "footer": {
+      "enterprise": "Need a custom solution for multiple locations?",
+      "contactTeam": "Contact our enterprise team",
+      "included": "All plans include 24/7 support, regular updates, and HIPAA compliance"
+    },
+    "partner": {
+      "title": "Referral Partner Program",
+      "description": "When you use a referral code, your referring agent earns a commission for helping you discover our platform. It's our way of thanking healthcare professionals who recommend Clinikdb to their colleagues."
+    },
+    "save": "Save ${{amount}} with promo code"
+  },
+  "testimonials": {
+    "badge": "Testimonials",
+    "title": "Trusted by Healthcare Professionals",
+    "subtitle": "Discover why medical practices choose Clinikdb for their management needs",
+    "stats": {
+      "satisfaction": "Customer Satisfaction",
+      "practices": "Medical Practices",
+      "rating": "Average Rating"
+    },
+    "cta": {
+      "title": "Join 500+ Medical Practices",
+      "subtitle": "Start your 7-day free trial and experience the difference",
+      "button": "Start Free Trial"
+    }
+  },
+  "footer": {
+    "company": {
+      "title": "Company",
+      "about": "About Us",
+      "careers": "Careers",
+      "press": "Press",
+      "contact": "Contact"
+    },
+    "product": {
+      "title": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "security": "Security",
+      "updates": "Updates"
+    },
+    "resources": {
+      "title": "Resources",
+      "blog": "Blog",
+      "documentation": "Documentation",
+      "support": "Support Center",
+      "status": "System Status"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "hipaa": "HIPAA Compliance",
+      "cookies": "Cookie Policy"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Get the latest updates and medical practice tips",
+      "placeholder": "Enter your email",
+      "button": "Subscribe"
+    },
+    "copyright": "© 2024 Clinikdb. All rights reserved.",
+    "madeWith": "Made with",
+    "for": "for medical professionals"
+  }
+}
