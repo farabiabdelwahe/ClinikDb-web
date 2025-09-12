@@ -1,0 +1,30 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "promocodes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "assigned_agent_id", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "subscriptions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "promocode_id", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "agent_promocode_commissions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "agent_id", "order": "ASCENDING" },
+        { "fieldPath": "commission_status", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
+

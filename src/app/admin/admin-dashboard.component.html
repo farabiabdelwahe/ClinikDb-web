@@ -1,37 +1,148 @@
-<div class="min-h-screen bg-slate-50 py-10">
-  <div class="container">
-    <div class="mb-6 flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-slate-800">Admin Dashboard</h1>
-        <p class="text-slate-500">Onboard cabinets, manage agents & track commissions.</p>
-      </div>
-      <nav class="flex gap-2">
-        <button class="btn" [class.btn-primary]="activeTab==='overview'" (click)="activeTab='overview'">Overview</button>
-        <button class="btn" [class.btn-primary]="activeTab==='promocodes'" (click)="activeTab='promocodes'">Promo Codes</button>
-        <button class="btn" [class.btn-primary]="activeTab==='subscriptions'" (click)="activeTab='subscriptions'">Subscriptions</button>
-        <button class="btn" [class.btn-primary]="activeTab==='commissions'" (click)="activeTab='commissions'">Commissions</button>
-        <button class="btn" [class.btn-primary]="activeTab==='agents'" (click)="activeTab='agents'">Agents</button>
-      </nav>
-    </div>
+<div class="min-h-screen bg-slate-50">
+  <div class="container py-8">
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Sidebar -->
+      <aside class="col-span-12 md:col-span-3 lg:col-span-2 bg-white rounded-2xl shadow-sm h-fit sticky top-6 p-4">
+        <div class="mb-3">
+          <div class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Navigation</div>
+        </div>
+        <ul class="space-y-1">
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition ring-1 ring-transparent hover:ring-indigo-200 hover:bg-indigo-50/50"
+              [class.bg-gradient-to-r]="activeTab==='overview'" [class.from-indigo-50]="activeTab==='overview'" [class.to-transparent]="activeTab==='overview'" [class.text-indigo-800]="activeTab==='overview'"
+              (click)="activeTab='overview'">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg"
+                    [class.bg-indigo-100]="activeTab==='overview'" [class.text-indigo-700]="activeTab==='overview'"
+                    [class.bg-slate-100]="activeTab!=='overview'" [class.text-slate-600]="activeTab!=='overview'">
+                <lucide-angular [img]="ILayout" size="18"></lucide-angular>
+              </span>
+              <span class="font-medium">Overview</span>
+            </button>
+          </li>
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition ring-1 ring-transparent hover:ring-indigo-200 hover:bg-indigo-50/50"
+              [class.bg-gradient-to-r]="activeTab==='promocodes'" [class.from-indigo-50]="activeTab==='promocodes'" [class.to-transparent]="activeTab==='promocodes'" [class.text-indigo-800]="activeTab==='promocodes'"
+              (click)="activeTab='promocodes'">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg"
+                    [class.bg-indigo-100]="activeTab==='promocodes'" [class.text-indigo-700]="activeTab==='promocodes'"
+                    [class.bg-slate-100]="activeTab!=='promocodes'" [class.text-slate-600]="activeTab!=='promocodes'">
+                <lucide-angular [img]="ITags" size="18"></lucide-angular>
+              </span>
+              <span class="font-medium">Promo Codes</span>
+            </button>
+          </li>
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition ring-1 ring-transparent hover:ring-indigo-200 hover:bg-indigo-50/50"
+              [class.bg-gradient-to-r]="activeTab==='subscriptions'" [class.from-indigo-50]="activeTab==='subscriptions'" [class.to-transparent]="activeTab==='subscriptions'" [class.text-indigo-800]="activeTab==='subscriptions'"
+              (click)="activeTab='subscriptions'">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg"
+                    [class.bg-indigo-100]="activeTab==='subscriptions'" [class.text-indigo-700]="activeTab==='subscriptions'"
+                    [class.bg-slate-100]="activeTab!=='subscriptions'" [class.text-slate-600]="activeTab!=='subscriptions'">
+                <lucide-angular [img]="ICreditCard" size="18"></lucide-angular>
+              </span>
+              <span class="font-medium">Subscriptions</span>
+            </button>
+          </li>
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition ring-1 ring-transparent hover:ring-indigo-200 hover:bg-indigo-50/50"
+              [class.bg-gradient-to-r]="activeTab==='commissions'" [class.from-indigo-50]="activeTab==='commissions'" [class.to-transparent]="activeTab==='commissions'" [class.text-indigo-800]="activeTab==='commissions'"
+              (click)="activeTab='commissions'">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg"
+                    [class.bg-indigo-100]="activeTab==='commissions'" [class.text-indigo-700]="activeTab==='commissions'"
+                    [class.bg-slate-100]="activeTab!=='commissions'" [class.text-slate-600]="activeTab!=='commissions'">
+                <lucide-angular [img]="IWallet" size="18"></lucide-angular>
+              </span>
+              <span class="font-medium">Commissions</span>
+            </button>
+          </li>
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl transition ring-1 ring-transparent hover:ring-indigo-200 hover:bg-indigo-50/50"
+              [class.bg-gradient-to-r]="activeTab==='agents'" [class.from-indigo-50]="activeTab==='agents'" [class.to-transparent]="activeTab==='agents'" [class.text-indigo-800]="activeTab==='agents'"
+              (click)="activeTab='agents'">
+              <span class="flex h-8 w-8 items-center justify-center rounded-lg"
+                    [class.bg-indigo-100]="activeTab==='agents'" [class.text-indigo-700]="activeTab==='agents'"
+                    [class.bg-slate-100]="activeTab!=='agents'" [class.text-slate-600]="activeTab!=='agents'">
+                <lucide-angular [img]="IUsers" size="18"></lucide-angular>
+              </span>
+              <span class="font-medium">Agents</span>
+            </button>
+          </li>
+        </ul>
+        <div class="mt-6 border-t pt-4 text-xs text-slate-500">
+          Month: {{ monthCount }} tx • Unpaid {{ monthUnpaid | currency:'USD' }}
+        </div>
+      </aside>
 
-    <!-- Overview -->
+      <!-- Main -->
+      <main class="col-span-12 md:col-span-9 lg:col-span-10 space-y-6">
+        <div class="bg-gradient-to-r from-indigo-600 to-sky-500 text-white p-6 rounded-2xl shadow flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-semibold">Admin Dashboard</h1>
+            <p class="opacity-90">Onboard cabinets, manage agents & track commissions.</p>
+          </div>
+        </div>
+
+      <!-- Overview -->
     <section *ngIf="activeTab==='overview'" class="space-y-8">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <div class="text-slate-500 text-sm">Total Commissions</div>
-          <div class="text-2xl font-semibold mt-1">{{ totalCommission | currency:'USD' }}</div>
+        <!-- KPI: Total Commissions -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-indigo-50 to-transparent"></div>
+          <div class="flex items-center gap-4">
+            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-indigo-100 text-indigo-600">
+              <span class="sr-only">Total commissions</span>
+              <lucide-angular [img]="ITrendingUp" size="20"></lucide-angular>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">Total Commissions</div>
+              <div class="text-2xl font-semibold mt-1">{{ totalCommission | currency:'USD' }}</div>
+            </div>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <div class="text-slate-500 text-sm">This Month • Unpaid</div>
-          <div class="text-2xl font-semibold mt-1">{{ monthUnpaid | currency:'USD' }}</div>
+
+        <!-- KPI: Unpaid -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-amber-50 to-transparent"></div>
+          <div class="flex items-center gap-4">
+            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-100 text-amber-600">
+              <span class="sr-only">Unpaid commissions this month</span>
+              <lucide-angular [img]="IWallet" size="20"></lucide-angular>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Unpaid</div>
+              <div class="text-2xl font-semibold mt-1">{{ monthUnpaid | currency:'USD' }}</div>
+            </div>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <div class="text-slate-500 text-sm">This Month • Paid</div>
-          <div class="text-2xl font-semibold mt-1">{{ monthPaid | currency:'USD' }}</div>
+
+        <!-- KPI: Paid -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-emerald-50 to-transparent"></div>
+          <div class="flex items-center gap-4">
+            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-600">
+              <span class="sr-only">Paid commissions this month</span>
+              <lucide-angular [img]="ICreditCard" size="20"></lucide-angular>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Paid</div>
+              <div class="text-2xl font-semibold mt-1">{{ monthPaid | currency:'USD' }}</div>
+            </div>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <div class="text-slate-500 text-sm">This Month • Transactions</div>
-          <div class="text-2xl font-semibold mt-1">{{ monthCount }}</div>
+
+        <!-- KPI: Transactions -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-sky-50 to-transparent"></div>
+          <div class="flex items-center gap-4">
+            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-sky-100 text-sky-600">
+              <span class="sr-only">Transactions this month</span>
+              <lucide-angular [img]="IPercent" size="20"></lucide-angular>
+            </div>
+            <div class="flex-1">
+              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Transactions</div>
+              <div class="text-2xl font-semibold mt-1">{{ monthCount }}</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -103,7 +214,7 @@
           </thead>
           <tbody>
             <ng-container *ngIf="(promoCodes$ | async) as promos">
-              <tr *ngFor="let p of promos" class="border-t">
+              <tr *ngFor="let p of promos" class="border-t hover:bg-slate-50">
                 <td class="px-6 py-3 font-medium">{{ p.code }}</td>
                 <td class="px-6 py-3 text-slate-700">{{ agentName(p.assigned_agent_id, (agents$|async)) || '—' }}</td>
                 <td class="px-6 py-3 text-slate-700">{{ p.discount_type==='percentage' ? (p.discount_value+'%') : (p.discount_value | currency:'USD') }}</td>
@@ -131,7 +242,7 @@
           </thead>
           <tbody>
             <ng-container *ngIf="(subscriptions$ | async) as subs">
-              <tr *ngFor="let s of subs" class="border-t">
+              <tr *ngFor="let s of subs" class="border-t hover:bg-slate-50">
                 <td class="px-6 py-3 font-medium">{{ s.primary_email }}</td>
                 <td class="px-6 py-3">{{ s.plan_type | titlecase }}</td>
                 <td class="px-6 py-3">{{ promoCodeLabel(s.promocode_id, (promoCodes$|async)) || '—' }}</td>
@@ -164,7 +275,7 @@
           </thead>
           <tbody>
             <ng-container *ngIf="(commissions$ | async) as list">
-              <tr *ngFor="let c of list" class="border-t">
+              <tr *ngFor="let c of list" class="border-t hover:bg-slate-50">
                 <td class="px-4 py-3">
                   <input type="checkbox" [disabled]="c.commission_status==='paid'" (change)="toggleCommission(c.id, $event.target.checked)" />
                 </td>
@@ -203,5 +314,7 @@
         </table>
       </div>
     </section>
+      </main>
+    </div>
   </div>
 </div>

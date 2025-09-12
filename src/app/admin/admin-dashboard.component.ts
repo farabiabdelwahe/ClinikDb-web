@@ -9,15 +9,25 @@ import { Agent } from '../models/agent.model';
 import { PromoCode } from '../models/promocode.model';
 import { Subscription } from '../models/subscription.model';
 import { AgentPromoCodeCommission } from '../models/commission.model';
+import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, TrendingUp, BadgePercent } from 'lucide-angular';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, LucideAngularModule],
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit {
   private data = inject(AdminDataService);
+
+  // Icons
+  readonly ILayout = LayoutDashboard;
+  readonly ITags = Tags;
+  readonly ICreditCard = CreditCard;
+  readonly IWallet = Wallet;
+  readonly IUsers = Users;
+  readonly ITrendingUp = TrendingUp;
+  readonly IPercent = BadgePercent;
 
   // Streams
   agents$!: Observable<Agent[]>;

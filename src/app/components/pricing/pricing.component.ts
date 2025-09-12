@@ -128,7 +128,16 @@ export class PricingComponent {
     return plan.name;
   }
   
+  private sanitizeCode(value: string): string {
+    return value.toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9]/g, '');
+  }
+
+  onPromoInput(value: string): void {
+    this.promoCode = this.sanitizeCode(value);
+  }
+
   applyPromoCode(): void {
+    this.promoCode = this.sanitizeCode(this.promoCode || '');
     if (!this.promoCode.trim()) {
       this.snackBar.open('Please enter a promo code', 'Close', {
         duration: 3000,
@@ -144,7 +153,10 @@ export class PricingComponent {
       'AGENT10': 10,
       'AGENT15': 15,
       'AGENT20': 20,
-      'LAUNCH25': 25
+      'LAUNCH25': 25,
+      // Match demo data in Admin dashboard
+      'ALICE20': 20,
+      'BOB10': 10
     };
     
     const discount = validPromoCodes[this.promoCode.toUpperCase()];

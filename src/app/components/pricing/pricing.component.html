@@ -16,12 +16,12 @@
         
         <div *ngIf="!appliedPromoCode" class="promo-input-group">
           <mat-form-field appearance="outline" class="promo-field">
-            <mat-label>Enter Promo Code</mat-label>
-            <input matInput [(ngModel)]="promoCode" placeholder="e.g., AGENT20" (keyup.enter)="applyPromoCode()">
+            <mat-label>Referral Code</mat-label>
+            <input matInput [ngModel]="promoCode" (ngModelChange)="onPromoInput($event)" placeholder="e.g., ALICE20" (keyup.enter)="applyPromoCode()" autocomplete="off" aria-label="Referral code">
             <lucide-angular matSuffix [img]="Tag" size="20"></lucide-angular>
             <mat-hint>Enter the code provided by your referral agent</mat-hint>
           </mat-form-field>
-          <button mat-raised-button color="primary" (click)="applyPromoCode()" class="apply-button">
+          <button mat-raised-button color="primary" (click)="applyPromoCode()" class="apply-button" [disabled]="!promoCode">
             Apply Code
           </button>
         </div>

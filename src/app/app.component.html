@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar *ngIf="!isAdminRoute"></app-navbar>
 
 <ng-container *ngIf="!isAdminRoute; else routed">
   <div class="landing-page">

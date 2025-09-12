@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function isAdmin() { return isSignedIn() && userDoc().data.role == 'admin'; }
+    function isAgent() { return isSignedIn() && userDoc().data.role == 'agent'; }
+
+    // Admins can do anything
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Agents limited reads
+    match /promocodes/{code} {
+      allow read: if isAgent() && resource.data.assigned_agent_id == request.auth.uid;
+    }
+
+    match /agent_promocode_commissions/{id} {
+      allow read: if isAgent() && resource.data.agent_id == request.auth.uid;
+      // only CF/admins write
+      allow create, update, delete: if false;
+    }
+
+    // Public signup may create subscription documents, but with strict validation in CF
+    match /subscriptions/{id} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+  }
+}
+
