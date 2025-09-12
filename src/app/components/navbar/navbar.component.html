@@ -36,6 +36,12 @@
         {{ 'navbar.getStarted' | translate }}
         <lucide-angular [img]="ChevronRight" size="16" class="cta-icon"></lucide-angular>
       </button>
+
+      <!-- Auth + Dashboard -->
+      <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
+      <button class="cta-button" (click)="handleAuthClick()">
+        {{ (auth.user$ | async) ? 'Sign out' : 'Sign in' }}
+      </button>
     </div>
 
     <!-- Mobile Menu Toggle -->
@@ -102,6 +108,11 @@
         <span>{{ item.labelKey | translate }}</span>
         <lucide-angular [img]="ChevronRight" size="16" class="mobile-nav-arrow"></lucide-angular>
       </button>
+      <button class="mobile-nav-item" (click)="goToDashboard()">
+        <mat-icon class="mobile-nav-icon">dashboard</mat-icon>
+        <span>Dashboard</span>
+        <lucide-angular [img]="ChevronRight" size="16" class="mobile-nav-arrow"></lucide-angular>
+      </button>
     </nav>
     
     <div class="mobile-actions">
@@ -110,6 +121,9 @@
       </button>
       <button class="mobile-cta-button" (click)="scrollToSection('pricing')">
         {{ 'navbar.getStarted' | translate }}
+      </button>
+      <button class="mobile-demo-button" (click)="handleAuthClick()">
+        {{ (auth.user$ | async) ? 'Sign out' : 'Sign in' }}
       </button>
     </div>
     

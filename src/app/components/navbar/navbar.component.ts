@@ -9,11 +9,13 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { TranslationService, Language } from '../../services/translation.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
+import { AuthService } from '../../services/auth.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatBadgeModule, TranslatePipe],
+  imports: [CommonModule, LucideAngularModule, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatBadgeModule, TranslatePipe, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   animations: [
@@ -31,6 +33,8 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 export class NavbarComponent implements OnInit, OnDestroy {
   translationService = inject(TranslationService);
   private cdr = inject(ChangeDetectorRef);
+  auth = inject(AuthService);
+  private router = inject(Router);
   
   isScrolled = false;
   isMobileMenuOpen = false;
@@ -130,6 +134,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
     console.log('Changing language to:', langCode);
     await this.translationService.setLanguage(langCode);
     this.currentLanguage = this.translationService.getCurrentLanguage();
+    this.cdr.detectChanges();
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/admin']);
+    this.closeMobileMenu();
+  }
+
+  async handleAuthClick(): Promise<void> {
+    if (this.auth.currentUser) {
+      await this.auth.signOut();
+    } else {
+      await this.auth.signInWithGoogle();
+    }
     this.cdr.detectChanges();
   }
 }

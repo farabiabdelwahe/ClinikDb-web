@@ -1,0 +1,207 @@
+<div class="min-h-screen bg-slate-50 py-10">
+  <div class="container">
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800">Admin Dashboard</h1>
+        <p class="text-slate-500">Onboard cabinets, manage agents & track commissions.</p>
+      </div>
+      <nav class="flex gap-2">
+        <button class="btn" [class.btn-primary]="activeTab==='overview'" (click)="activeTab='overview'">Overview</button>
+        <button class="btn" [class.btn-primary]="activeTab==='promocodes'" (click)="activeTab='promocodes'">Promo Codes</button>
+        <button class="btn" [class.btn-primary]="activeTab==='subscriptions'" (click)="activeTab='subscriptions'">Subscriptions</button>
+        <button class="btn" [class.btn-primary]="activeTab==='commissions'" (click)="activeTab='commissions'">Commissions</button>
+        <button class="btn" [class.btn-primary]="activeTab==='agents'" (click)="activeTab='agents'">Agents</button>
+      </nav>
+    </div>
+
+    <!-- Overview -->
+    <section *ngIf="activeTab==='overview'" class="space-y-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="text-slate-500 text-sm">Total Commissions</div>
+          <div class="text-2xl font-semibold mt-1">{{ totalCommission | currency:'USD' }}</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="text-slate-500 text-sm">This Month • Unpaid</div>
+          <div class="text-2xl font-semibold mt-1">{{ monthUnpaid | currency:'USD' }}</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="text-slate-500 text-sm">This Month • Paid</div>
+          <div class="text-2xl font-semibold mt-1">{{ monthPaid | currency:'USD' }}</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <div class="text-slate-500 text-sm">This Month • Transactions</div>
+          <div class="text-2xl font-semibold mt-1">{{ monthCount }}</div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4">Performance</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="h-64">
+            <canvas baseChart [type]="'line'" [data]="lineChartData" [options]="lineChartOptions"></canvas>
+          </div>
+          <div class="h-64">
+            <canvas baseChart [type]="'doughnut'" [data]="doughnutChartData" [options]="doughnutChartOptions"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <h3 class="font-semibold text-slate-800 mb-3">Create Promo Code</h3>
+          <form class="grid grid-cols-1 gap-3" (ngSubmit)="createPromo()">
+            <input [(ngModel)]="newPromo.code" name="code" placeholder="Code (e.g., ALICE20)" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            <div class="grid grid-cols-2 gap-3">
+              <select [(ngModel)]="newPromo.discount_type" name="discount_type" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed</option>
+              </select>
+              <input [(ngModel)]="newPromo.discount_value" name="discount_value" type="number" placeholder="Value" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            </div>
+            <select [(ngModel)]="newPromo.assigned_agent_id" name="assigned_agent_id" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+              <option [ngValue]="undefined">Unassigned</option>
+              <option *ngFor="let a of (agents$ | async)" [value]="a.id">{{ a.displayName }}</option>
+            </select>
+            <button type="submit" class="btn btn-primary w-fit">Save Code</button>
+          </form>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+          <h3 class="font-semibold text-slate-800 mb-3">Onboard Subscription</h3>
+          <form class="grid grid-cols-1 gap-3" (ngSubmit)="onboardSubscription()">
+            <input [(ngModel)]="newSub.primary_email" name="primary_email" placeholder="Clinic email" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            <div class="grid grid-cols-2 gap-3">
+              <select [(ngModel)]="newSub.plan_type" name="plan_type" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <option value="basic">Basic</option>
+                <option value="pro">Pro</option>
+                <option value="enterprise">Enterprise</option>
+              </select>
+              <select [(ngModel)]="newSub.promocode_id" name="promocode_id" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <option [ngValue]="undefined">No promo</option>
+                <option *ngFor="let p of (promoCodes$ | async)" [value]="p.id">{{ p.code }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-fit">Create Subscription</button>
+            <p class="text-xs text-slate-500">Payment method defaults to Flouci (mock).</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Promo Codes -->
+    <section *ngIf="activeTab==='promocodes'" class="space-y-4">
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table class="min-w-full">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Code</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Agent</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Discount</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Redemptions</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(promoCodes$ | async) as promos">
+              <tr *ngFor="let p of promos" class="border-t">
+                <td class="px-6 py-3 font-medium">{{ p.code }}</td>
+                <td class="px-6 py-3 text-slate-700">{{ agentName(p.assigned_agent_id, (agents$|async)) || '—' }}</td>
+                <td class="px-6 py-3 text-slate-700">{{ p.discount_type==='percentage' ? (p.discount_value+'%') : (p.discount_value | currency:'USD') }}</td>
+                <td class="px-6 py-3 text-slate-700">{{ p.redemption_count }}</td>
+                <td class="px-6 py-3"><span class="px-2 py-1 rounded text-xs" [class.bg-green-100]="p.status==='active'" [class.text-green-700]="p.status==='active'" [class.bg-slate-100]="p.status!=='active'">{{ p.status }}</span></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Subscriptions -->
+    <section *ngIf="activeTab==='subscriptions'" class="space-y-4">
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table class="min-w-full">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Plan</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Promo</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Started</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(subscriptions$ | async) as subs">
+              <tr *ngFor="let s of subs" class="border-t">
+                <td class="px-6 py-3 font-medium">{{ s.primary_email }}</td>
+                <td class="px-6 py-3">{{ s.plan_type | titlecase }}</td>
+                <td class="px-6 py-3">{{ promoCodeLabel(s.promocode_id, (promoCodes$|async)) || '—' }}</td>
+                <td class="px-6 py-3">{{ s.status }}</td>
+                <td class="px-6 py-3 text-slate-500">{{ s.start_date | date:'medium' }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Commissions -->
+    <section *ngIf="activeTab==='commissions'" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="text-slate-600">Select unpaid commissions to mark as paid.</div>
+        <button class="btn btn-primary" (click)="markSelectedPaid(selectedCommissionIds)">Mark Selected as Paid</button>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table class="min-w-full">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-4 py-3"></th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Agent</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Promo</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="(commissions$ | async) as list">
+              <tr *ngFor="let c of list" class="border-t">
+                <td class="px-4 py-3">
+                  <input type="checkbox" [disabled]="c.commission_status==='paid'" (change)="toggleCommission(c.id, $event.target.checked)" />
+                </td>
+                <td class="px-6 py-3">{{ agentName(c.agent_id, (agents$|async)) }}</td>
+                <td class="px-6 py-3">{{ promoCodeLabel(c.promocode_id, (promoCodes$|async)) }}</td>
+                <td class="px-6 py-3">{{ c.amount | currency:c.currency }}</td>
+                <td class="px-6 py-3">
+                  <span class="px-2 py-1 rounded text-xs" [class.bg-emerald-100]="c.commission_status==='paid'" [class.text-emerald-700]="c.commission_status==='paid'" [class.bg-amber-100]="c.commission_status==='unpaid'" [class.text-amber-800]="c.commission_status==='unpaid'">{{ c.commission_status }}</span>
+                </td>
+                <td class="px-6 py-3 text-slate-500">{{ c.createdAt | date:'medium' }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Agents -->
+    <section *ngIf="activeTab==='agents'" class="space-y-4">
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <table class="min-w-full">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of (agents$ | async)" class="border-t">
+              <td class="px-6 py-3 font-medium">{{ a.displayName }}</td>
+              <td class="px-6 py-3">{{ a.email || '—' }}</td>
+              <td class="px-6 py-3 text-slate-500">{{ a.createdAt | date:'mediumDate' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
