@@ -23,9 +23,7 @@
             "outputPath": "dist/agent-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -39,9 +37,7 @@
                 "output": "/assets"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -67,6 +63,60 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "tn": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/enviroment.tn.ts"
+                }
+              ],
+              "define": {
+                "NG_APP_REGION": "\"tn\"",
+                "NG_APP_ENABLE_AGENT_COMMISSION": "true"
+              }
+            },
+            "intl": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/enviroment.intl.ts"
+                }
+              ],
+              "define": {
+                "NG_APP_REGION": "\"intl\"",
+                "NG_APP_ENABLE_AGENT_COMMISSION": "false"
+              }
             }
           },
           "defaultConfiguration": "production"
@@ -79,6 +129,12 @@
             },
             "development": {
               "buildTarget": "agent-app:build:development"
+            },
+            "tn": {
+              "buildTarget": "agent-app:build:tn"
+            },
+            "intl": {
+              "buildTarget": "agent-app:build:intl"
             }
           },
           "defaultConfiguration": "development"
@@ -89,10 +145,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -106,9 +159,7 @@
                 "output": "/assets"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
