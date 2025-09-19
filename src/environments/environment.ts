@@ -1,15 +1,45 @@
+/**
+ * Development environment
+ * This file is the default (dev) source that will be replaced by
+ * enviroment.tn.ts or enviroment.intl.ts in their respective build configurations.
+ *
+ * Keep flags here so local dev can exercise all code paths without
+ * needing to build the specialized variants every time.
+ */
+const env = (import.meta as any)?.env || {};
+
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
-  appVersion: '1.0.0-dev',
-  // Fill these with your Firebase Web App config from the Firebase Console
+  region: "dev",
+  apiUrl: env.NG_APP_API_URL_DEV || "http://localhost:3000/api",
+  appVersion: env.NG_APP_VERSION || "1.0.0-dev",
+
+  /**
+   * Feature flags
+   * agentCommission: enabled so you can test commission UI locally
+   * geoIpDetection: keep true; you can stub the service if no network call
+   */
+  features: {
+    agentCommission: true,
+    geoIpDetection: true,
+  },
+
+  /**
+   * Firebase config (dev/testing). Use real values only if needed locally.
+   * These can be overridden by defining env vars (e.g. NG_APP_FIREBASE_API_KEY_DEV).
+   */
   firebase: {
-    apiKey: 'AIzaSyBNFTUMdrCx2u7iquEoXEGXKGkTJqURw4I',
-    authDomain: 'agent-comission.firebaseapp.com',
-    projectId: 'agent-comission',
-    storageBucket: 'agent-comission.appspot.com',
-    messagingSenderId: '417195912004',
-    appId: '1:417195912004:web:9ee65afa21794e7d880511',
-    measurementId: 'G-C93K6TGKF9'
-  }
+    apiKey: env.NG_APP_FIREBASE_API_KEY_DEV || "",
+    authDomain: env.NG_APP_FIREBASE_AUTH_DOMAIN_DEV || "",
+    projectId: env.NG_APP_FIREBASE_PROJECT_ID_DEV || "agent-comission",
+    storageBucket: env.NG_APP_FIREBASE_STORAGE_BUCKET_DEV || "",
+    messagingSenderId: env.NG_APP_FIREBASE_MESSAGING_SENDER_ID_DEV || "",
+    appId: env.NG_APP_FIREBASE_APP_ID_DEV || "",
+    measurementId: env.NG_APP_FIREBASE_MEASUREMENT_ID_DEV || "",
+  },
+
+  buildMeta: {
+    generatedAt: new Date().toISOString(),
+    notes: "Local development build with all features enabled.",
+  },
 };

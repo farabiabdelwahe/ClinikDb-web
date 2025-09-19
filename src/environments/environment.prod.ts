@@ -12,5 +12,5 @@ export const environment = {
     messagingSenderId: env.NG_APP_FIREBASE_MESSAGING_SENDER_ID || '',
     appId: env.NG_APP_FIREBASE_APP_ID || '',
     measurementId: env.NG_APP_FIREBASE_MEASUREMENT_ID || ''
-  }
+  },
 };
