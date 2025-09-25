@@ -1,13 +1,20 @@
 {
+  "common": {
+    "close": "Fermer"
+  },
   "navbar": {
-   "brand": "Clinik",
+    "brand": "Clinik",
     "brandSuffix": "db",
     "features": "Fonctionnalités",
     "howItWorks": "Comment ça marche",
     "pricing": "Tarifs",
     "testimonials": "Témoignages",
     "bookDemo": "Réserver une démo",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "dashboard": "Tableau de bord",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "languageLabel": "Langue / Language / اللغة"
   },
   "hero": {
     "title": "Transformez Votre Cabinet Médical",
@@ -56,6 +63,8 @@
   "pricing": {
     "title": "Solutions Cabinet Médical",
     "subtitle": "Choisissez le plan qui correspond aux besoins de votre cabinet médical",
+    "currencyUSD": "$",
+    "currencyTND": "DT",
     "referral": {
       "title": "Avez-vous un code de parrainage?",
       "placeholder": "Entrez le code promo",
@@ -64,7 +73,17 @@
       "applyButton": "Appliquer",
       "applied": "Code promo appliqué!",
       "discount": "Réduction de {{percentage}}%",
-      "info": "Les codes de parrainage vous aident à économiser et soutiennent les professionnels de santé de notre réseau"
+      "info": "Les codes de parrainage vous aident à économiser et soutiennent les professionnels de santé de notre réseau",
+      "openPanel": "Ouvrir le panneau de parrainage",
+      "closePanel": "Fermer le panneau de parrainage",
+      "activeSavingsHint": "Les tarifs affichés intègrent déjà votre réduction active.",
+      "activeSavingsHintShort": "Les prix reflètent la réduction.",
+      "remove": "Retirer le code",
+      "errorInvalid": "Code de parrainage invalide ou expiré.",
+      "validating": "Validation du code...",
+      "cleared": "Code de parrainage retiré.",
+      "footnoteTN": "Le programme de parrainage et de commission est disponible en Tunisie. L’utilisation d’un code valide vous fait économiser et récompense les professionnels de santé.",
+      "footnoteIntl": "Les fonctionnalités de parrainage sont désactivées pour les déploiements internationaux."
     },
     "plans": {
       "free": {
@@ -124,7 +143,12 @@
       "title": "Programme de Partenariat de Parrainage",
       "description": "Lorsque vous utilisez un code de parrainage, votre agent parrain gagne une commission pour vous avoir fait découvrir notre plateforme. C'est notre façon de remercier les professionnels de santé qui recommandent MedCabinet Pro à leurs collègues."
     },
-    "save": "Économisez {{amount}}$ avec le code promo"
+    "save": "Économisez {{amount}}$ avec le code promo",
+    "subscription": {
+      "trial": "Démarrage de l’essai : {{plan}}",
+      "standard": "Abonnement à {{plan}} - Total : {{amount}}/{{period}}",
+      "withDiscount": "Abonnement à {{plan}} avec le code {{code}} ({{percentage}}% de réduction) - Total : {{amount}}/{{period}}"
+    }
   },
   "testimonials": {
     "badge": "Témoignages",

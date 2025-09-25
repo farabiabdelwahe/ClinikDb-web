@@ -2,55 +2,177 @@
   <div class="pricing-container">
     <!-- Header -->
     <div class="pricing-header">
-      <h2 class="pricing-title">Medical Cabinet Solutions</h2>
-      <p class="pricing-subtitle">Choose the plan that fits your medical practice's needs</p>
+      <h2 class="pricing-title">{{ "pricing.title" | translate }}</h2>
+      <p class="pricing-subtitle">{{ "pricing.subtitle" | translate }}</p>
     </div>
-    
-    <!-- Promo Code Section -->
-    <div class="promo-section">
-      <mat-card class="promo-card">
-        <div class="promo-header">
-          <lucide-angular [img]="Gift" size="24" class="promo-icon"></lucide-angular>
-          <h3 class="promo-title">Have a referral code?</h3>
-        </div>
-        
-        <div *ngIf="!appliedPromoCode" class="promo-input-group">
-          <mat-form-field appearance="outline" class="promo-field">
-            <mat-label>Referral Code</mat-label>
-            <input matInput [ngModel]="promoCode" (ngModelChange)="onPromoInput($event)" placeholder="e.g., ALICE20" (keyup.enter)="applyPromoCode()" autocomplete="off" aria-label="Referral code">
-            <lucide-angular matSuffix [img]="Tag" size="20"></lucide-angular>
-            <mat-hint>Enter the code provided by your referral agent</mat-hint>
-          </mat-form-field>
-          <button mat-raised-button color="primary" (click)="applyPromoCode()" class="apply-button" [disabled]="!promoCode">
-            Apply Code
+
+    <!-- Referral / Commission (feature gated) -->
+    <div *ngIf="featureAgentCommission" class="referral-wrapper">
+      <mat-card
+        class="referral-card"
+        [class.referral-collapsed]="promoState().status === 'collapsed'"
+      >
+        <div class="referral-header">
+          <div class="referral-heading">
+            <lucide-angular
+              [img]="Gift"
+              size="24"
+              class="referral-gift"
+            ></lucide-angular>
+            <h3>{{ "pricing.referral.title" | translate }}</h3>
+            <span
+              *ngIf="promoState().status === 'applied'"
+              class="active-badge"
+            >
+              {{ discountPercentage }}%
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="toggle-referral"
+            (click)="toggleReferralPanel()"
+            [attr.aria-expanded]="promoState().status !== 'collapsed'"
+            [attr.aria-controls]="'referral-panel'"
+            [attr.aria-label]="
+              promoState().status === 'collapsed'
+                ? ('pricing.referral.openPanel' | translate)
+                : ('pricing.referral.closePanel' | translate)
+            "
+          >
+            <mat-icon>
+              {{
+                promoState().status === "collapsed"
+                  ? "expand_more"
+                  : "expand_less"
+              }}
+            </mat-icon>
           </button>
         </div>
-        
-        <div *ngIf="appliedPromoCode" class="promo-applied">
-          <div class="promo-applied-content">
-            <lucide-angular [img]="CheckCircle" size="24" class="success-icon"></lucide-angular>
-            <div class="promo-applied-text">
-              <p class="promo-applied-title">Promo code applied!</p>
-              <p class="promo-applied-code">{{ appliedPromoCode }} - {{ discountPercentage }}% discount</p>
+
+        <div
+          id="referral-panel"
+          class="referral-body"
+          *ngIf="promoState().status !== 'collapsed'"
+        >
+          <!-- Applied State -->
+          <div
+            *ngIf="promoState().status === 'applied'"
+            class="referral-applied"
+          >
+            <div class="applied-left">
+              <lucide-angular
+                [img]="CheckCircle"
+                size="28"
+                class="applied-icon"
+              ></lucide-angular>
+              <div class="applied-text">
+                <p class="title">
+                  {{ "pricing.referral.applied" | translate }}
+                </p>
+                <p class="code-line">
+                  {{ promoState().code }} •
+                  {{
+                    "pricing.referral.discount"
+                      | translate: { percentage: discountPercentage }
+                  }}
+                </p>
+                <p class="saving-hint">
+                  {{ "pricing.referral.activeSavingsHint" | translate }}
+                </p>
+              </div>
+            </div>
+            <div class="applied-actions">
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="removeReferral()"
+              >
+                {{ "pricing.referral.remove" | translate }}
+              </button>
             </div>
           </div>
-          <button mat-icon-button (click)="removePromoCode()" class="remove-button">
-            <lucide-angular [img]="X" size="20"></lucide-angular>
-          </button>
-        </div>
-        
-        <mat-divider class="promo-divider"></mat-divider>
-        
-        <div class="promo-info">
-          <mat-icon class="info-icon">info_outline</mat-icon>
-          <p class="info-text">Referral codes help you save and support healthcare professionals in our network</p>
+
+          <!-- Entry / Validation State -->
+          <div *ngIf="promoState().status !== 'applied'" class="referral-entry">
+            <mat-form-field
+              appearance="outline"
+              class="referral-field"
+              subscriptSizing="dynamic"
+            >
+              <mat-label>{{
+                "pricing.referral.placeholder" | translate
+              }}</mat-label>
+              <input
+                matInput
+                [value]="promoInput"
+                (input)="onReferralInput($event.target.value)"
+                [placeholder]="'pricing.referral.example' | translate"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="18"
+                aria-describedby="referral-help referral-status"
+                [disabled]="promoState().status === 'validating'"
+              />
+              <lucide-angular matSuffix [img]="Tag" size="18"></lucide-angular>
+              <mat-hint id="referral-help">
+                {{ "pricing.referral.hint" | translate }}
+              </mat-hint>
+            </mat-form-field>
+
+            <div class="referral-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="applyReferral()"
+                [disabled]="!canApply() || promoState().status === 'validating'"
+              >
+                <ng-container [ngSwitch]="promoState().status">
+                  <span *ngSwitchCase="'validating'" class="btn-validating">
+                    <mat-progress-spinner
+                      mode="indeterminate"
+                      diameter="18"
+                      strokeWidth="3"
+                    ></mat-progress-spinner>
+                    {{ "pricing.referral.validating" | translate }}
+                  </span>
+                  <span *ngSwitchDefault>{{
+                    "pricing.referral.applyButton" | translate
+                  }}</span>
+                </ng-container>
+              </button>
+            </div>
+
+            <div
+              id="referral-status"
+              class="referral-status"
+              [class.error]="promoState().status === 'error'"
+              [class.validating]="promoState().status === 'validating'"
+              [class.info]="promoState().status === 'open'"
+              aria-live="polite"
+            >
+              {{ t(promoState().messageKey, promoState().messageParams) }}
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="referral-footnote">
+            <mat-icon>info</mat-icon>
+            <p *ngIf="region === 'tn'">
+              {{ "pricing.referral.footnoteTN" | translate }}
+            </p>
+            <p *ngIf="region !== 'tn'">
+              {{ "pricing.referral.footnoteIntl" | translate }}
+            </p>
+          </div>
         </div>
       </mat-card>
     </div>
-    
+
     <!-- Pricing Cards -->
     <div class="pricing-grid">
-      <mat-card 
+      <mat-card
         *ngFor="let plan of plans; trackBy: trackByPlan"
         class="pricing-card"
         [class.highlighted]="plan.highlighted"
@@ -60,48 +182,70 @@
         <div *ngIf="plan.badge" class="plan-badge-container">
           <span class="plan-badge">{{ plan.badge }}</span>
         </div>
-        
-        <!-- Card Header with Icon -->
+
+        <!-- Card Header -->
         <div class="card-header" [style.background]="plan.gradient">
           <div class="plan-icon-wrapper">
-            <lucide-angular [img]="plan.icon" size="32" class="plan-icon"></lucide-angular>
+            <lucide-angular
+              [img]="plan.icon"
+              size="32"
+              class="plan-icon"
+            ></lucide-angular>
           </div>
           <h3 class="plan-name">{{ plan.name }}</h3>
           <p class="plan-description">{{ plan.description }}</p>
         </div>
-        
+
         <mat-card-content class="card-content">
-          <!-- Pricing -->
           <div class="pricing-display">
             <div class="price-row">
-              <span *ngIf="plan.price === 0" class="price-free">Free</span>
+              <span *ngIf="plan.price === 0" class="price-free">{{
+                "pricing.plans.free.name" | translate
+              }}</span>
               <div *ngIf="plan.price > 0" class="price-container">
-                <span class="currency">$</span>
-                <span class="price-amount">{{ getDiscountedPrice(plan.price) }}</span>
+                <span class="currency">{{ currencySymbol() }}</span>
+                <span
+                  class="price-amount"
+                  [class.discounted]="discountPercentage > 0"
+                >
+                  {{ getDiscountedPrice(plan.price) }}
+                </span>
                 <span class="price-period">/{{ plan.period }}</span>
               </div>
             </div>
-            <div *ngIf="plan.price > 0 && discountPercentage > 0" class="discount-info">
-              <span class="original-price">${{ plan.price }}</span>
+
+            <div
+              *ngIf="plan.price > 0 && discountPercentage > 0"
+              class="discount-info"
+            >
+              <span class="original-price"
+                >{{ currencySymbol() }}{{ plan.price }}</span
+              >
               <mat-chip class="savings-chip">
-                Save ${{ plan.price - getDiscountedPrice(plan.price) }}
+                {{
+                  "pricing.save"
+                    | translate
+                      : { amount: plan.price - getDiscountedPrice(plan.price) }
+                }}
               </mat-chip>
             </div>
           </div>
-          
+
           <mat-divider class="features-divider"></mat-divider>
-          
-          <!-- Features List -->
+
           <ul class="features-list">
             <li *ngFor="let feature of plan.features" class="feature-item">
-              <lucide-angular [img]="CheckCircle" size="20" class="feature-icon"></lucide-angular>
+              <lucide-angular
+                [img]="CheckCircle"
+                size="20"
+                class="feature-icon"
+              ></lucide-angular>
               <span class="feature-text">{{ feature }}</span>
             </li>
           </ul>
-          
-          <!-- CTA Button -->
-          <button 
-            mat-raised-button 
+
+          <button
+            mat-raised-button
             [color]="plan.highlighted ? 'primary' : ''"
             class="plan-button"
             [class.primary-button]="plan.highlighted"
@@ -112,27 +256,29 @@
         </mat-card-content>
       </mat-card>
     </div>
-    
+
     <!-- Footer Notes -->
     <div class="pricing-footer">
       <div class="enterprise-section">
         <mat-icon class="enterprise-icon">business</mat-icon>
         <div class="enterprise-content">
           <p class="enterprise-text">
-            Need a custom solution for multiple locations?
+            {{ "pricing.footer.enterprise" | translate }}
           </p>
-          <a href="#contact" class="enterprise-link">Contact our enterprise team →</a>
+          <a href="#contact" class="enterprise-link">
+            {{ "pricing.footer.contactTeam" | translate }} →
+          </a>
         </div>
       </div>
-      
+
       <div class="features-note">
         <mat-icon>verified_user</mat-icon>
-        <p>All plans include 24/7 support, regular updates, and HIPAA compliance</p>
+        <p>{{ "pricing.footer.included" | translate }}</p>
       </div>
     </div>
-    
-    <!-- Referral Partner Info -->
-    <div class="partner-info">
+
+    <!-- Partner Info (Feature gated) -->
+    <div class="partner-info" *ngIf="showPartnerInfo()">
       <mat-card class="partner-card">
         <mat-card-content>
           <div class="partner-content">
@@ -140,10 +286,11 @@
               <mat-icon class="partner-icon">handshake</mat-icon>
             </div>
             <div class="partner-text">
-              <h4 class="partner-title">Referral Partner Program</h4>
+              <h4 class="partner-title">
+                {{ "pricing.partner.title" | translate }}
+              </h4>
               <p class="partner-description">
-                When you use a referral code, your referring agent earns a commission for helping you discover our platform. 
-                It's our way of thanking healthcare professionals who recommend MedCabinet Pro to their colleagues.
+                {{ "pricing.partner.description" | translate }}
               </p>
             </div>
           </div>

@@ -1,4 +1,7 @@
 {
+  "common": {
+    "close": "Close"
+  },
   "navbar": {
     "brand": "Clinik",
     "brandSuffix": "db",
@@ -7,7 +10,11 @@
     "pricing": "Pricing",
     "testimonials": "Testimonials",
     "bookDemo": "Book Demo",
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "dashboard": "Dashboard",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "languageLabel": "Language / Langue / اللغة"
   },
   "hero": {
     "title": "Transform Your Medical Practice",
@@ -56,6 +63,8 @@
   "pricing": {
     "title": "Medical Cabinet Solutions",
     "subtitle": "Choose the plan that fits your medical practice's needs",
+    "currencyUSD": "$",
+    "currencyTND": "DT",
     "referral": {
       "title": "Have a referral code?",
       "placeholder": "Enter Promo Code",
@@ -64,7 +73,22 @@
       "applyButton": "Apply Code",
       "applied": "Promo code applied!",
       "discount": "{{percentage}}% discount",
-      "info": "Referral codes help you save and support healthcare professionals in our network"
+      "info": "Referral codes help you save and support healthcare professionals in our network",
+      "openPanel": "Open referral panel",
+      "closePanel": "Close referral panel",
+      "activeSavingsHint": "Plan prices already reflect your active discount.",
+      "remove": "Remove Code",
+      "errorInvalid": "Invalid or expired referral code.",
+      "validating": "Validating referral code...",
+      "cleared": "Referral code cleared.",
+      "footnoteTN": "Referral & commission program is available in Tunisia. Using a valid referral code unlocks savings and rewards healthcare professionals.",
+      "footnoteIntl": "Referral features are disabled for international production builds.",
+      "activeSavingsHintShort": "Prices below reflect the discounted totals."
+    },
+    "subscription": {
+      "trial": "Starting trial: {{plan}}",
+      "standard": "Subscribing to {{plan}} - Total: {{amount}}/{{period}}",
+      "withDiscount": "Subscribing to {{plan}} with code {{code}} ({{percentage}}% off) - Total: {{amount}}/{{period}}"
     },
     "plans": {
       "free": {

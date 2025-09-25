@@ -1,134 +1,36 @@
-<nav class="navbar" [class.scrolled]="isScrolled">
-  <div class="navbar-container">
-    <!-- Logo/Brand -->
-    <div class="navbar-brand" (click)="scrollToTop()">
-      <div class="logo-wrapper">
-        <lucide-angular [img]="Activity" size="28" class="logo-icon"></lucide-angular>
-      </div>
-      <span class="brand-text">{{ 'navbar.brand' | translate }}<span class="brand-highlight">{{ 'navbar.brandSuffix' | translate }}</span></span>
+<nav class="navbar"></nav>
+<div class="navbar-container">
+  <!-- Logo/Brand -->
+  <div class="navbar-brand" (click)="scrollToTop()">
+    <div class="logo-wrapper">
+      <span class="logo-text">⚕️</span>
     </div>
+    <span class="brand-text">ClinikDB</span>
+  </div>
 
-    <!-- Desktop Navigation -->
-    <div class="desktop-nav">
-      <button 
-        *ngFor="let item of navItems"
-        class="nav-link"
-        [class.active]="activeSection === item.section"
-        (click)="scrollToSection(item.section)"
-      >
-        {{ item.labelKey | translate }}
-        <span class="nav-indicator"></span>
-      </button>
-    </div>
-
-    <!-- CTA Section -->
-    <div class="nav-actions">
-      <!-- Language Switcher -->
-      <button mat-button class="lang-button" [matMenuTriggerFor]="languageMenu">
-        <lucide-angular [img]="Globe" size="18"></lucide-angular>
-        <span class="lang-code">{{ currentLanguage?.code?.toUpperCase() }}</span>
-      </button>
-      
-      <button class="demo-button">
-        {{ 'navbar.bookDemo' | translate }}
-      </button>
-      <button class="cta-button" (click)="scrollToSection('pricing')">
-        {{ 'navbar.getStarted' | translate }}
-        <lucide-angular [img]="ChevronRight" size="16" class="cta-icon"></lucide-angular>
-      </button>
-
-      <!-- Auth + Dashboard -->
-      <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
-      <button class="cta-button" (click)="handleAuthClick()">
-        {{ (auth.user$ | async) ? 'Sign out' : 'Sign in' }}
-      </button>
-    </div>
-
-    <!-- Mobile Menu Toggle -->
-    <button class="mobile-toggle" (click)="toggleMobileMenu()">
-      <lucide-angular [img]="isMobileMenuOpen ? X : Menu" size="24"></lucide-angular>
+  <!-- Desktop Navigation -->
+  <div class="desktop-nav">
+    <button
+      *ngFor="let item of navItems"
+      class="nav-link"
+      [class.active]="activeSection === item.section"
+      (click)="scrollToSection(item.section)"
+    >
+      {{ item.labelKey }}
     </button>
   </div>
-</nav>
 
-<!-- Language Menu -->
-<mat-menu #languageMenu="matMenu" class="language-menu">
-  <button 
-    mat-menu-item 
-    *ngFor="let lang of languages"
-    (click)="changeLanguage(lang.code)"
-    [class.active]="currentLanguage?.code === lang.code"
-  >
-    <span class="lang-flag">{{ lang.flag }}</span>
-    <span class="lang-name">{{ lang.nativeName }}</span>
-    <mat-icon *ngIf="currentLanguage?.code === lang.code" class="check-icon">check</mat-icon>
-  </button>
-</mat-menu>
-
-<!-- Mobile Menu Overlay -->
-<div class="mobile-overlay" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
-
-<!-- Mobile Menu -->
-<div class="mobile-menu" [class.open]="isMobileMenuOpen" [@slideIn]>
-  <div class="mobile-menu-content">
-    <div class="mobile-menu-header">
-      <div class="mobile-brand">
-        <lucide-angular [img]="Activity" size="24" class="logo-icon"></lucide-angular>
-        <span>{{ 'navbar.brand' | translate }}<span class="brand-highlight">{{ 'navbar.brandSuffix' | translate }}</span></span>
-      </div>
-      <button class="mobile-close" (click)="closeMobileMenu()">
-        <lucide-angular [img]="X" size="24"></lucide-angular>
-      </button>
-    </div>
-    
-    <!-- Language Selector in Mobile -->
-    <div class="mobile-language-selector">
-      <div class="language-label">Language / Langue / اللغة</div>
-      <div class="language-options">
-        <button 
-          *ngFor="let lang of languages"
-          class="language-option"
-          [class.active]="currentLanguage?.code === lang.code"
-          (click)="changeLanguage(lang.code)"
-        >
-          <span class="lang-flag">{{ lang.flag }}</span>
-          <span class="lang-name">{{ lang.nativeName }}</span>
-        </button>
-      </div>
-    </div>
-    
-    <nav class="mobile-nav">
-      <button 
-        *ngFor="let item of navItems"
-        class="mobile-nav-item"
-        [class.active]="activeSection === item.section"
-        (click)="scrollToSection(item.section)"
-      >
-        <mat-icon class="mobile-nav-icon">{{ item.icon }}</mat-icon>
-        <span>{{ item.labelKey | translate }}</span>
-        <lucide-angular [img]="ChevronRight" size="16" class="mobile-nav-arrow"></lucide-angular>
-      </button>
-      <button class="mobile-nav-item" (click)="goToDashboard()">
-        <mat-icon class="mobile-nav-icon">dashboard</mat-icon>
-        <span>Dashboard</span>
-        <lucide-angular [img]="ChevronRight" size="16" class="mobile-nav-arrow"></lucide-angular>
-      </button>
-    </nav>
-    
-    <div class="mobile-actions">
-      <button class="mobile-demo-button">
-        {{ 'navbar.bookDemo' | translate }}
-      </button>
-      <button class="mobile-cta-button" (click)="scrollToSection('pricing')">
-        {{ 'navbar.getStarted' | translate }}
-      </button>
-      <button class="mobile-demo-button" (click)="handleAuthClick()">
-        {{ (auth.user$ | async) ? 'Sign out' : 'Sign in' }}
-      </button>
-    </div>
-    
-    <div class="mobile-footer">
-      <p>{{ 'footer.copyright' | translate }}</p>
-    </div>
+  <!-- CTA Section -->
+  <div class="nav-actions">
+    <button class="demo-button">Book Demo</button>
+    <button class="cta-button" (click)="scrollToSection('pricing')">
+      Get Started
+    </button>
+    <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
   </div>
+
+  <!-- Mobile Menu Toggle -->
+  <button class="mobile-toggle" (click)="toggleMobileMenu()">
+    <span>☰</span>
+  </button>
 </div>

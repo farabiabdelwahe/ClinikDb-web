@@ -1,3 +1,4 @@
+/* Root layout */
 .pricing-section {
   padding: 100px 0;
   background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
@@ -10,11 +11,11 @@
   padding: 0 24px;
 }
 
-// Header Section
+/* Header */
 .pricing-header {
   text-align: center;
   margin-bottom: 60px;
-  
+
   .pricing-title {
     font-size: 48px;
     font-weight: 800;
@@ -23,209 +24,308 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 16px;
-    
+
     @media (max-width: 768px) {
       font-size: 36px;
     }
   }
-  
+
   .pricing-subtitle {
     font-size: 20px;
     color: #64748b;
     font-weight: 400;
     max-width: 600px;
     margin: 0 auto;
-    
+
     @media (max-width: 768px) {
       font-size: 18px;
     }
   }
 }
 
-// Promo Code Section
-.promo-section {
-  max-width: 520px;
-  margin: 0 auto 60px;
-  
-  .promo-card {
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+/* Referral (overhauled) */
+.referral-wrapper {
+  max-width: 640px;
+  margin: 0 auto 56px;
+
+  .referral-card {
+    border-radius: 18px;
+    padding: 0;
     border: 1px solid #e2e8f0;
-    padding: 24px;
-    background: white;
-    transition: all 0.3s ease;
-    
+    background: #ffffff;
+    transition:
+      box-shadow 0.3s ease,
+      border-color 0.3s ease;
+    overflow: hidden;
+
     &:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      border-color: #cbd5e1;
+      box-shadow:
+        0 6px 14px -4px rgba(0, 0, 0, 0.08),
+        0 3px 6px -2px rgba(0, 0, 0, 0.05);
     }
-  }
-  
-  .promo-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    
-    .promo-icon {
-      color: #8b5cf6;
-    }
-    
-    .promo-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1e293b;
-      margin: 0;
-    }
-  }
-  
-  .promo-input-group {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    
-    @media (max-width: 480px) {
-      flex-direction: column;
-    }
-    
-    .promo-field {
-      flex: 1;
-      
-      ::ng-deep {
-        .mat-mdc-form-field-subscript-wrapper {
-          margin-top: 4px;
-        }
-        
-        .mat-mdc-text-field-wrapper {
-          background: #f8fafc;
-        }
-        
-        .mdc-notched-outline__leading,
-        .mdc-notched-outline__notch,
-        .mdc-notched-outline__trailing {
-          border-color: #e2e8f0 !important;
-        }
-        
-        .mat-mdc-form-field-focus-overlay {
-          background-color: transparent;
-        }
-        
-        &.mat-focused {
-          .mdc-notched-outline__leading,
-          .mdc-notched-outline__notch,
-          .mdc-notched-outline__trailing {
-            border-color: #8b5cf6 !important;
-          }
-        }
-      }
-    }
-    
-    .apply-button {
-      height: 56px;
-      padding: 0 24px;
-      font-weight: 600;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      
-      @media (max-width: 480px) {
-        width: 100%;
-      }
-      
-      &:hover {
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+
+    &.referral-collapsed {
+      .referral-body {
+        display: none;
       }
     }
   }
-  
-  .promo-applied {
+
+  .referral-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-    border: 1px solid #86efac;
-    border-radius: 12px;
-    padding: 16px;
-    
-    .promo-applied-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      
-      .success-icon {
-        color: #22c55e;
-      }
-      
-      .promo-applied-text {
-        .promo-applied-title {
-          font-weight: 600;
-          color: #15803d;
-          margin: 0 0 4px 0;
-        }
-        
-        .promo-applied-code {
-          font-size: 14px;
-          color: #16a34a;
-          margin: 0;
-        }
-      }
-    }
-    
-    .remove-button {
-      color: #6b7280;
-      
-      &:hover {
-        background: rgba(0, 0, 0, 0.04);
-      }
-    }
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%);
+    border-bottom: 1px solid #e9d5ff;
   }
-  
-  .promo-divider {
-    margin: 20px 0;
-    opacity: 0.1;
-  }
-  
-  .promo-info {
+
+  .referral-heading {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px;
-    background: #f8fafc;
-    border-radius: 8px;
-    
-    .info-icon {
-      color: #64748b;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-    
-    .info-text {
-      font-size: 14px;
-      color: #64748b;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #4c1d95;
       margin: 0;
-      line-height: 1.5;
+    }
+
+    .referral-gift {
+      color: #7c3aed;
+    }
+
+    .active-badge {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(22, 163, 74, 0.4);
+    }
+  }
+
+  .toggle-referral {
+    border: none;
+    background: #ffffff;
+    border-radius: 8px;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4c1d95;
+    transition: background 0.2s;
+
+    mat-icon {
+      font-size: 24px;
+    }
+
+    &:hover {
+      background: #f1f5f9;
+    }
+  }
+
+  .referral-body {
+    padding: 20px 24px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .referral-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    .referral-field {
+      width: 100%;
+
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        background: #ffffff;
+        border-radius: 8px;
+      }
+
+      ::ng-deep .mdc-notched-outline__leading,
+      ::ng-deep .mdc-notched-outline__notch,
+      ::ng-deep .mdc-notched-outline__trailing {
+        border-color: #d1d5db !important;
+        border-width: 1px !important;
+      }
+
+      ::ng-deep .mat-mdc-form-field-focus-overlay {
+        background: transparent !important;
+      }
+
+      ::ng-deep .mat-focused .mdc-notched-outline__leading,
+      ::ng-deep .mat-focused .mdc-notched-outline__notch,
+      ::ng-deep .mat-focused .mdc-notched-outline__trailing {
+        border-color: #7c3aed !important;
+        border-width: 2px !important;
+      }
+
+      ::ng-deep .mdc-floating-label {
+        color: #6b7280 !important;
+      }
+
+      ::ng-deep .mat-focused .mdc-floating-label {
+        color: #7c3aed !important;
+      }
+
+      ::ng-deep .mat-mdc-input-element {
+        color: #374151 !important;
+      }
+
+      ::ng-deep .mat-mdc-form-field-hint-wrapper {
+        padding-top: 4px;
+      }
+
+      ::ng-deep .mat-mdc-form-field-hint {
+        color: #6b7280 !important;
+        font-size: 12px !important;
+      }
+    }
+
+    .referral-actions {
+      display: flex;
+      justify-content: flex-start;
+
+      button {
+        font-weight: 600;
+        border-radius: 10px;
+        min-width: 140px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        &:hover {
+          box-shadow: 0 4px 12px rgba(109, 40, 217, 0.35);
+        }
+      }
+
+      .btn-validating {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+  }
+
+  .referral-status {
+    font-size: 13px;
+    line-height: 1.4;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #f1f5f9;
+    color: #475569;
+    &.validating {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+    &.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  }
+
+  .referral-applied {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    padding: 16px 18px;
+    border-radius: 14px;
+
+    .applied-left {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      flex: 1;
+
+      .applied-icon {
+        color: #16a34a;
+      }
+
+      .applied-text {
+        .title {
+          margin: 0;
+          font-weight: 600;
+          color: #166534;
+        }
+        .code-line {
+          margin: 2px 0 6px;
+          font-size: 14px;
+          color: #15803d;
+          font-weight: 500;
+        }
+        .saving-hint {
+          margin: 0;
+          font-size: 12px;
+          color: #047857;
+        }
+      }
+    }
+
+    .applied-actions {
+      display: flex;
+      align-items: center;
+
+      button {
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .referral-footnote {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #f8fafc;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #475569;
+
+    mat-icon {
+      font-size: 18px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    p {
+      margin: 0;
+      flex: 1;
     }
   }
 }
 
-// Pricing Grid
+/* Pricing Grid */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 32px;
   margin-bottom: 60px;
-  
+
   @media (max-width: 1200px) {
     grid-template-columns: 1fr;
     max-width: 600px;
     margin: 0 auto 60px;
   }
-  
+
   @media (min-width: 768px) and (max-width: 1199px) {
     grid-template-columns: repeat(2, 1fr);
     max-width: 100%;
   }
 }
 
+/* Pricing Card */
 .pricing-card {
   position: relative;
   border-radius: 20px;
@@ -233,36 +333,38 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid #e2e8f0;
   background: white;
-  
+
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
-  
+
   &.highlighted {
     border: 2px solid #8b5cf6;
     box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.25);
     transform: scale(1.05);
-    
+
     @media (max-width: 1200px) {
       transform: scale(1);
     }
-    
+
     &:hover {
       transform: scale(1.08);
-      
+
       @media (max-width: 1200px) {
         transform: translateY(-8px);
       }
     }
   }
-  
+
   .plan-badge-container {
     position: absolute;
     top: -12px;
     right: 24px;
     z-index: 10;
-    
+
     .plan-badge {
       background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
       color: white;
@@ -275,34 +377,34 @@
       box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
     }
   }
-  
+
   .card-header {
     padding: 32px 32px 24px;
     text-align: center;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border-radius: 20px 20px 0 0;
-    
+
     &[style*="gradient"] {
       color: white;
-      
+
       .plan-icon-wrapper {
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
-        
+
         .plan-icon {
           color: white;
         }
       }
-      
+
       .plan-name {
         color: white;
       }
-      
+
       .plan-description {
         color: rgba(255, 255, 255, 0.9);
       }
     }
-    
+
     .plan-icon-wrapper {
       width: 64px;
       height: 64px;
@@ -313,19 +415,19 @@
       justify-content: center;
       margin: 0 auto 20px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      
+
       .plan-icon {
         color: #8b5cf6;
       }
     }
-    
+
     .plan-name {
       font-size: 24px;
       font-weight: 700;
       color: #1e293b;
       margin: 0 0 8px;
     }
-    
+
     .plan-description {
       font-size: 14px;
       color: #64748b;
@@ -333,17 +435,17 @@
       line-height: 1.5;
     }
   }
-  
+
   .card-content {
     padding: 24px 32px 32px;
-    
+
     .pricing-display {
       text-align: center;
       margin-bottom: 24px;
-      
+
       .price-row {
         margin-bottom: 8px;
-        
+
         .price-free {
           font-size: 48px;
           font-weight: 800;
@@ -352,25 +454,29 @@
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
-        
+
         .price-container {
           display: flex;
           align-items: baseline;
           justify-content: center;
           gap: 4px;
-          
+
           .currency {
             font-size: 24px;
             font-weight: 600;
             color: #64748b;
           }
-          
+
           .price-amount {
             font-size: 48px;
             font-weight: 800;
             color: #1e293b;
+
+            &.discounted {
+              color: #0f172a;
+            }
           }
-          
+
           .price-period {
             font-size: 18px;
             color: #64748b;
@@ -378,19 +484,19 @@
           }
         }
       }
-      
+
       .discount-info {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 12px;
-        
+
         .original-price {
           font-size: 20px;
           color: #94a3b8;
           text-decoration: line-through;
         }
-        
+
         .savings-chip {
           background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
           color: white;
@@ -401,33 +507,33 @@
         }
       }
     }
-    
+
     .features-divider {
       margin: 24px 0;
       opacity: 0.1;
     }
-    
+
     .features-list {
       list-style: none;
       padding: 0;
       margin: 0 0 32px;
-      
+
       .feature-item {
         display: flex;
         align-items: flex-start;
         gap: 12px;
         margin-bottom: 16px;
-        
+
         &:last-child {
           margin-bottom: 0;
         }
-        
+
         .feature-icon {
           color: #22c55e;
           flex-shrink: 0;
           margin-top: 2px;
         }
-        
+
         .feature-text {
           font-size: 15px;
           color: #475569;
@@ -435,7 +541,7 @@
         }
       }
     }
-    
+
     .plan-button {
       width: 100%;
       height: 48px;
@@ -443,23 +549,23 @@
       font-weight: 600;
       border-radius: 12px;
       transition: all 0.3s ease;
-      
+
       &:not(.primary-button) {
         background: white;
         color: #8b5cf6;
         border: 2px solid #8b5cf6;
-        
+
         &:hover {
           background: #8b5cf6;
           color: white;
           box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
         }
       }
-      
+
       &.primary-button {
         background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
         border: none;
-        
+
         &:hover {
           box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
           transform: translateY(-2px);
@@ -469,10 +575,10 @@
   }
 }
 
-// Footer Section
+/* Footer Section */
 .pricing-footer {
   margin-bottom: 40px;
-  
+
   .enterprise-section {
     display: flex;
     align-items: center;
@@ -483,28 +589,28 @@
     background: white;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    
+
     .enterprise-icon {
       color: #8b5cf6;
       font-size: 28px;
     }
-    
+
     .enterprise-content {
       text-align: left;
-      
+
       .enterprise-text {
         font-size: 16px;
         color: #475569;
         margin: 0 0 8px;
       }
-      
+
       .enterprise-link {
         font-size: 16px;
         font-weight: 600;
         color: #8b5cf6;
         text-decoration: none;
         transition: all 0.2s ease;
-        
+
         &:hover {
           color: #7c3aed;
           text-decoration: underline;
@@ -512,7 +618,7 @@
       }
     }
   }
-  
+
   .features-note {
     display: flex;
     align-items: center;
@@ -521,12 +627,12 @@
     padding: 16px;
     background: #f8fafc;
     border-radius: 8px;
-    
+
     mat-icon {
       color: #22c55e;
       font-size: 20px;
     }
-    
+
     p {
       font-size: 14px;
       color: #64748b;
@@ -535,27 +641,27 @@
   }
 }
 
-// Partner Info Section
+/* Partner Info */
 .partner-info {
   max-width: 800px;
   margin: 0 auto;
-  
+
   .partner-card {
     background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
     border: 1px solid #c4b5fd;
     border-radius: 16px;
-    
+
     .partner-content {
       display: flex;
       align-items: flex-start;
       gap: 20px;
-      
+
       @media (max-width: 640px) {
         flex-direction: column;
         align-items: center;
         text-align: center;
       }
-      
+
       .partner-icon-wrapper {
         flex-shrink: 0;
         width: 48px;
@@ -566,23 +672,23 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        
+
         .partner-icon {
           color: #8b5cf6;
           font-size: 24px;
         }
       }
-      
+
       .partner-text {
         flex: 1;
-        
+
         .partner-title {
           font-size: 18px;
           font-weight: 600;
           color: #5b21b6;
           margin: 0 0 8px;
         }
-        
+
         .partner-description {
           font-size: 14px;
           color: #6b21a8;
@@ -594,21 +700,21 @@
   }
 }
 
-// Responsive adjustments
+/* Responsive */
 @media (max-width: 640px) {
   .pricing-section {
     padding: 60px 0;
   }
-  
+
   .pricing-container {
     padding: 0 16px;
   }
-  
+
   .pricing-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  
+
   .pricing-card {
     .card-header,
     .card-content {
