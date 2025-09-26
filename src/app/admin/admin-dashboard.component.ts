@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Observable, combineLatest, map, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartData, ChartOptions } from 'chart.js';
 import { AdminDataService } from '../services/admin-data.service';
@@ -9,6 +9,7 @@ import { Agent } from '../models/agent.model';
 import { PromoCode } from '../models/promocode.model';
 import { Subscription } from '../models/subscription.model';
 import { AgentPromoCodeCommission } from '../models/commission.model';
+import { AppUser } from '../models/app-user.model';
 import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, TrendingUp, BadgePercent } from 'lucide-angular';
 
 @Component({
@@ -34,6 +35,7 @@ export class AdminDashboardComponent implements OnInit {
   promoCodes$!: Observable<PromoCode[]>;
   subscriptions$!: Observable<Subscription[]>;
   commissions$!: Observable<AgentPromoCodeCommission[]>;
+  doctors$!: Observable<AppUser[]>;
 
   // UI state
   activeTab: 'overview' | 'promocodes' | 'subscriptions' | 'commissions' | 'agents' = 'overview';
@@ -49,6 +51,10 @@ export class AdminDashboardComponent implements OnInit {
 
   // Onboard subscription form
   newSub: Partial<Subscription> = { primary_email: '', promocode_id: undefined, plan_type: 'basic', payment_method: 'flouci' };
+
+  // Onboard people
+  newAgent = { displayName: '', email: '' };
+  newDoctor = { displayName: '', email: '' };
 
   // Selection state for commissions payout
   selectedCommissionIds = new Set<string>();
@@ -100,6 +106,7 @@ export class AdminDashboardComponent implements OnInit {
     this.promoCodes$ = this.data.getPromoCodes();
     this.subscriptions$ = this.data.getSubscriptions();
     this.commissions$ = this.data.getCommissions();
+    this.doctors$ = this.data.getDoctors();
 
     // Totals
     this.commissions$.subscribe(list => {
@@ -164,5 +171,41 @@ export class AdminDashboardComponent implements OnInit {
   promoCodeLabel(promoId?: string | null, promos?: PromoCode[] | null): string {
     if (!promoId || !promos) return '';
     return promos.find(p => p.id === promoId)?.code || promoId;
+  }
+
+  inviteAgent(): void {
+    const email = this.newAgent.email.trim().toLowerCase();
+    if (!this.newAgent.displayName.trim() || !email) {
+      return;
+    }
+
+    this.data.inviteAgent({
+      displayName: this.newAgent.displayName.trim(),
+      email,
+    }).subscribe({
+      next: () => {
+        this.newAgent = { displayName: '', email: '' };
+        this.activeTab = 'agents';
+      },
+      error: (err) => console.error('Failed to invite agent', err),
+    });
+  }
+
+  inviteDoctor(): void {
+    const email = this.newDoctor.email.trim().toLowerCase();
+    if (!this.newDoctor.displayName.trim() || !email) {
+      return;
+    }
+
+    this.data.inviteDoctor({
+      displayName: this.newDoctor.displayName.trim(),
+      email,
+    }).subscribe({
+      next: () => {
+        this.newDoctor = { displayName: '', email: '' };
+        // keep current tab
+      },
+      error: (err) => console.error('Failed to invite doctor', err),
+    });
   }
 }
