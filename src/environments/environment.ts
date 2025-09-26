@@ -11,7 +11,8 @@ const env = (import.meta as any)?.env || {};
 export const environment = {
   production: false,
   region: "dev",
-  apiUrl: env.NG_APP_API_URL_DEV || "http://localhost:3000/api",
+  apiUrl:
+    env.NG_APP_API_URL_DEV || env.NG_APP_API_URL || "http://localhost:3000/api",
   appVersion: env.NG_APP_VERSION || "1.0.0-dev",
 
   /**
@@ -29,13 +30,34 @@ export const environment = {
    * These can be overridden by defining env vars (e.g. NG_APP_FIREBASE_API_KEY_DEV).
    */
   firebase: {
-    apiKey: env.NG_APP_FIREBASE_API_KEY_DEV || "",
-    authDomain: env.NG_APP_FIREBASE_AUTH_DOMAIN_DEV || "",
-    projectId: env.NG_APP_FIREBASE_PROJECT_ID_DEV || "agent-comission",
-    storageBucket: env.NG_APP_FIREBASE_STORAGE_BUCKET_DEV || "",
-    messagingSenderId: env.NG_APP_FIREBASE_MESSAGING_SENDER_ID_DEV || "",
-    appId: env.NG_APP_FIREBASE_APP_ID_DEV || "",
-    measurementId: env.NG_APP_FIREBASE_MEASUREMENT_ID_DEV || "",
+    apiKey:
+      env.NG_APP_FIREBASE_API_KEY_DEV ||
+      env.NG_APP_FIREBASE_API_KEY ||
+      "",
+    authDomain:
+      env.NG_APP_FIREBASE_AUTH_DOMAIN_DEV ||
+      env.NG_APP_FIREBASE_AUTH_DOMAIN ||
+      "",
+    projectId:
+      env.NG_APP_FIREBASE_PROJECT_ID_DEV ||
+      env.NG_APP_FIREBASE_PROJECT_ID ||
+      "agent-comission",
+    storageBucket:
+      env.NG_APP_FIREBASE_STORAGE_BUCKET_DEV ||
+      env.NG_APP_FIREBASE_STORAGE_BUCKET ||
+      "",
+    messagingSenderId:
+      env.NG_APP_FIREBASE_MESSAGING_SENDER_ID_DEV ||
+      env.NG_APP_FIREBASE_MESSAGING_SENDER_ID ||
+      "",
+    appId:
+      env.NG_APP_FIREBASE_APP_ID_DEV ||
+      env.NG_APP_FIREBASE_APP_ID ||
+      "",
+    measurementId:
+      env.NG_APP_FIREBASE_MEASUREMENT_ID_DEV ||
+      env.NG_APP_FIREBASE_MEASUREMENT_ID ||
+      "",
   },
 
   buildMeta: {
