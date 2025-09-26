@@ -1,8 +1,4 @@
-<!-- Always show navbar unless explicitly on admin route -->
-<app-navbar *ngIf="!isAdminRoute"></app-navbar>
-
-<ng-container *ngIf="!isAdminRoute; else routed">
-  <div class="landing-page">
+<div class="landing-page">
     <app-hero></app-hero>
     <app-features id="features"></app-features>
     <app-how-it-works id="how-it-works"></app-how-it-works>
@@ -11,8 +7,4 @@
     <app-cta></app-cta>
     <app-footer></app-footer>
   </div>
-</ng-container>
-
-<ng-template #routed>
-  <router-outlet></router-outlet>
-</ng-template>
+  

@@ -16,13 +16,35 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    provideAnalytics(() => getAnalytics()),
+    // Firebase providers - only if configuration is complete
+    ...(environment.firebase.apiKey && environment.firebase.projectId
+      ? [
+          provideFirebaseApp(() => {
+            console.log('🔥 Initializing Firebase with project:', environment.firebase.projectId);
+            return initializeApp(environment.firebase);
+          }),
+          provideAuth(() => {
+            console.log('🔐 Initializing Firebase Auth');
+            return getAuth();
+          }),
+          provideFirestore(() => {
+            console.log('📄 Initializing Firestore');
+            return getFirestore();
+          }),
+          // Only provide analytics if measurementId exists
+          ...(environment.firebase.measurementId
+            ? [provideAnalytics(() => {
+                console.log('📊 Initializing Firebase Analytics');
+                return getAnalytics();
+              })]
+            : []),
+        ]
+      : []),
     provideCharts(withDefaultRegisterables()),
-    ScreenTrackingService,
-    UserTrackingService,
+    // Firebase services - only if Firebase is configured
+    ...(environment.firebase.apiKey && environment.firebase.projectId
+      ? [ScreenTrackingService, UserTrackingService]
+      : []),
     { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ]
 };

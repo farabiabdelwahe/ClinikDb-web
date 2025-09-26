@@ -1,36 +1,50 @@
-<nav class="navbar"></nav>
-<div class="navbar-container">
-  <!-- Logo/Brand -->
-  <div class="navbar-brand" (click)="scrollToTop()">
-    <div class="logo-wrapper">
-      <span class="logo-text">⚕️</span>
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo/Brand -->
+    <div class="navbar-brand" (click)="scrollToTop()">
+      <div class="logo-wrapper">
+        <span class="logo-text">⚕️</span>
+      </div>
+      <span class="brand-text">ClinikDB</span>
     </div>
-    <span class="brand-text">ClinikDB</span>
-  </div>
 
-  <!-- Desktop Navigation -->
-  <div class="desktop-nav">
-    <button
-      *ngFor="let item of navItems"
-      class="nav-link"
-      [class.active]="activeSection === item.section"
-      (click)="scrollToSection(item.section)"
-    >
-      {{ item.labelKey }}
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav">
+      <button
+        *ngFor="let item of navItems"
+        class="nav-link"
+        [class.active]="activeSection === item.section"
+        (click)="scrollToSection(item.section)"
+      >
+        {{ item.labelKey }}
+      </button>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="nav-actions">
+      <button class="demo-button" (click)="openLoginModal()">Log In</button>
+      <button class="cta-button" (click)="scrollToSection('pricing')">
+        Get Started
+      </button>
+      <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" (click)="toggleMobileMenu()">
+      <span>☰</span>
     </button>
   </div>
+</nav>
 
-  <!-- CTA Section -->
-  <div class="nav-actions">
-    <button class="demo-button">Book Demo</button>
-    <button class="cta-button" (click)="scrollToSection('pricing')">
-      Get Started
+<!-- Login Modal -->
+<div class="login-modal-backdrop" *ngIf="showLoginModal" (click)="closeLoginModal()">
+  <div class="login-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeLoginModal()">✕</button>
+    <h2 class="modal-title">Log In</h2>
+    <p class="modal-subtitle">Continue with your Google account</p>
+    <button class="google-btn" (click)="loginWithGoogle()">
+      <span class="google-icon">G</span>
+      <span>Continue with Google</span>
     </button>
-    <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
   </div>
-
-  <!-- Mobile Menu Toggle -->
-  <button class="mobile-toggle" (click)="toggleMobileMenu()">
-    <span>☰</span>
-  </button>
 </div>

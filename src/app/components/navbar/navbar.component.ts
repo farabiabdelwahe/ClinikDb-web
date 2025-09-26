@@ -7,6 +7,7 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
+// import { AuthService } from "../../services/auth.service"; // Temporarily commented out to avoid circular dependency
 
 @Component({
   selector: "app-navbar",
@@ -17,10 +18,13 @@ import { Router } from "@angular/router";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private router = inject(Router);
+  // private authService = inject(AuthService); // Temporarily commented out
 
   isScrolled = false;
   isMobileMenuOpen = false;
   activeSection = "home";
+  showLoginModal = false;
+  // user$ = this.authService.user$; // Temporarily commented out
 
   navItems = [
     { labelKey: "Features", section: "features", icon: "dashboard" },
@@ -94,5 +98,28 @@ export class NavbarComponent implements OnInit, OnDestroy {
   goToDashboard(): void {
     this.router.navigate(["/admin"]);
     this.closeMobileMenu();
+  }
+
+  // Login modal handlers
+  openLoginModal(): void {
+    this.showLoginModal = true;
+  }
+
+  closeLoginModal(): void {
+    this.showLoginModal = false;
+  }
+
+  loginWithGoogle(): void {
+    console.log('Login functionality temporarily disabled - Firebase not configured');
+    this.closeLoginModal();
+    // Temporarily disabled to avoid circular dependency
+    // this.authService
+    //   .signInWithGoogle()
+    //   .then(() => {
+    //     this.closeLoginModal();
+    //   })
+    //   .catch((err) => {
+    //     console.error("Google sign-in failed", err);
+    //   });
   }
 }

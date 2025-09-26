@@ -9,7 +9,7 @@ import { TestimonialsComponent } from './components/testimonials/testimonials.co
 import { CtaComponent } from './components/cta/cta.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TranslationService } from './services/translation.service';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -32,10 +32,11 @@ import { Router, RouterOutlet } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'Clinikdb';
   translationService = inject(TranslationService);
-  private router = inject(Router);
+  router = inject(Router); // Made public for template access
   
   get isAdminRoute(): boolean {
-    return this.router.url.startsWith('/admin');
+    const url = this.router.url || '/';
+    return url.startsWith('/admin');
   }
 
   ngOnInit(): void {
