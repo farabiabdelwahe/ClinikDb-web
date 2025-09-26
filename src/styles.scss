@@ -33,11 +33,11 @@ body {
 
 @layer components {
   .btn {
-    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
   }
   
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply bg-indigo-500 text-white shadow-sm hover:bg-indigo-600 focus:ring-indigo-300;
   }
   
   .btn-secondary {

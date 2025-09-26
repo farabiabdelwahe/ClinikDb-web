@@ -1,0 +1,185 @@
+{
+  "overview": {
+    "metrics": {
+      "totalCommission": 630.5,
+      "month": {
+        "paid": 352.5,
+        "unpaid": 278,
+        "count": 4
+      }
+    },
+    "charts": {
+      "commissionsByMonth": {
+        "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        "values": [120, 145, 168, 210, 230, 250, 280, 305, 325, 360, 385, 420]
+      },
+      "acquisitionSplit": {
+        "labels": ["Direct", "Referral", "Promo Codes"],
+        "values": [42, 28, 30]
+      }
+    }
+  },
+  "agents": [
+    {
+      "id": "ag_alice",
+      "displayName": "Alice Gharbi",
+      "email": "alice@salesloop.tn",
+      "createdAtDaysAgo": 42
+    },
+    {
+      "id": "ag_brahim",
+      "displayName": "Brahim Nouri",
+      "email": "brahim@salesloop.tn",
+      "createdAtDaysAgo": 24
+    },
+    {
+      "id": "ag_lina",
+      "displayName": "Lina Kallel",
+      "email": "lina@medconnect.tn",
+      "createdAtDaysAgo": 9
+    }
+  ],
+  "promoCodes": [
+    {
+      "id": "pc_alice20",
+      "code": "ALICE20",
+      "assigned_agent_id": "ag_alice",
+      "discount_type": "percentage",
+      "discount_value": 20,
+      "redemption_count": 12,
+      "status": "active",
+      "createdAtDaysAgo": 35,
+      "updatedAtDaysAgo": 5
+    },
+    {
+      "id": "pc_nouri15",
+      "code": "NOURI15",
+      "assigned_agent_id": "ag_brahim",
+      "discount_type": "percentage",
+      "discount_value": 15,
+      "redemption_count": 8,
+      "status": "active",
+      "createdAtDaysAgo": 28,
+      "updatedAtDaysAgo": 3
+    },
+    {
+      "id": "pc_care40",
+      "code": "CARE40",
+      "assigned_agent_id": "ag_lina",
+      "discount_type": "fixed",
+      "discount_value": 40,
+      "redemption_count": 5,
+      "status": "active",
+      "createdAtDaysAgo": 16,
+      "updatedAtDaysAgo": 2
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub_casbahcare",
+      "promocode_id": "pc_alice20",
+      "primary_email": "contact@casbahcare.tn",
+      "status": "active",
+      "start_date_days_ago": 14,
+      "plan_type": "pro",
+      "payment_method": "flouci",
+      "createdAtDaysAgo": 14,
+      "updatedAtDaysAgo": 4
+    },
+    {
+      "id": "sub_tunis_pediatrics",
+      "promocode_id": "pc_nouri15",
+      "primary_email": "hello@tunis-pediatrics.tn",
+      "status": "active",
+      "start_date_days_ago": 9,
+      "plan_type": "basic",
+      "payment_method": "flouci",
+      "createdAtDaysAgo": 9,
+      "updatedAtDaysAgo": 3
+    },
+    {
+      "id": "sub_north_clinic",
+      "promocode_id": "pc_care40",
+      "primary_email": "admin@northclinic.tn",
+      "status": "active",
+      "start_date_days_ago": 6,
+      "plan_type": "enterprise",
+      "payment_method": "flouci",
+      "createdAtDaysAgo": 6,
+      "updatedAtDaysAgo": 2
+    },
+    {
+      "id": "sub_coastal_med",
+      "promocode_id": "pc_nouri15",
+      "primary_email": "ops@coastalmed.tn",
+      "status": "active",
+      "start_date_days_ago": 3,
+      "plan_type": "pro",
+      "payment_method": "flouci",
+      "createdAtDaysAgo": 3,
+      "updatedAtDaysAgo": 1
+    }
+  ],
+  "commissions": [
+    {
+      "id": "cm_casbahcare",
+      "agent_id": "ag_alice",
+      "promocode_id": "pc_alice20",
+      "subscription_id": "sub_casbahcare",
+      "commission_status": "paid",
+      "amount": 142.5,
+      "currency": "USD",
+      "createdAtDaysAgo": 14,
+      "updatedAtDaysAgo": 4
+    },
+    {
+      "id": "cm_tunis_pediatrics",
+      "agent_id": "ag_brahim",
+      "promocode_id": "pc_nouri15",
+      "subscription_id": "sub_tunis_pediatrics",
+      "commission_status": "unpaid",
+      "amount": 98,
+      "currency": "USD",
+      "createdAtDaysAgo": 9,
+      "updatedAtDaysAgo": 3
+    },
+    {
+      "id": "cm_north_clinic",
+      "agent_id": "ag_lina",
+      "promocode_id": "pc_care40",
+      "subscription_id": "sub_north_clinic",
+      "commission_status": "paid",
+      "amount": 210,
+      "currency": "USD",
+      "createdAtDaysAgo": 6,
+      "updatedAtDaysAgo": 2
+    },
+    {
+      "id": "cm_coastal_med",
+      "agent_id": "ag_brahim",
+      "promocode_id": "pc_nouri15",
+      "subscription_id": "sub_coastal_med",
+      "commission_status": "unpaid",
+      "amount": 180,
+      "currency": "USD",
+      "createdAtDaysAgo": 3,
+      "updatedAtDaysAgo": 1
+    }
+  ],
+  "doctors": [
+    {
+      "id": "doc_jane",
+      "email": "dr.jane.safi@casbahcare.tn",
+      "displayName": "Dr. Jane Safi",
+      "createdAtDaysAgo": 18,
+      "photoURL": null
+    },
+    {
+      "id": "doc_hatem",
+      "email": "hatem@northclinic.tn",
+      "displayName": "Dr. Hatem Ben Youssef",
+      "createdAtDaysAgo": 8,
+      "photoURL": null
+    }
+  ]
+}
