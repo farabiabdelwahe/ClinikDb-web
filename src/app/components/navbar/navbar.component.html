@@ -22,11 +22,50 @@
 
     <!-- CTA Section -->
     <div class="nav-actions">
-      <button class="demo-button" (click)="openLoginModal()">Log In</button>
-      <button class="cta-button" (click)="scrollToSection('pricing')">
+      <ng-container *ngIf="user$ | async as user; else loggedOut">
+        <div class="user-menu-wrapper" #userMenuContainer>
+          <button
+            class="user-chip"
+            type="button"
+            (click)="toggleUserMenu($event)"
+            [attr.aria-expanded]="userMenuOpen"
+            aria-haspopup="true"
+          >
+            <ng-container *ngIf="user.photoURL; else initials">
+              <img
+                class="user-avatar"
+                [src]="user.photoURL"
+                [alt]="user.displayName || user.email || 'User avatar'"
+              />
+            </ng-container>
+            <ng-template #initials>
+              <div class="user-avatar placeholder">
+                {{ getUserInitials(user) }}
+              </div>
+            </ng-template>
+            <span class="user-name">{{ user.displayName || user.email }}</span>
+          </button>
+          <div class="user-menu" *ngIf="userMenuOpen">
+            <button class="user-menu-item" type="button" (click)="goToDashboard()">
+              Dashboard
+            </button>
+            <button class="user-menu-item" type="button" (click)="logout()">
+              Sign out
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loggedOut>
+        <button class="demo-button" type="button" (click)="openLoginModal()">
+          Log In
+        </button>
+      </ng-template>
+      <button class="cta-button" type="button" (click)="scrollToSection('pricing')">
         Get Started
       </button>
-      <button class="demo-button" (click)="goToDashboard()">Dashboard</button>
+      <button class="demo-button" type="button" (click)="goToDashboard()">
+        Dashboard
+      </button>
     </div>
 
     <!-- Mobile Menu Toggle -->
@@ -37,7 +76,11 @@
 </nav>
 
 <!-- Login Modal -->
-<div class="login-modal-backdrop" *ngIf="showLoginModal" (click)="closeLoginModal()">
+<div
+  class="login-modal-backdrop"
+  *ngIf="showLoginModal && !(user$ | async)"
+  (click)="closeLoginModal()"
+>
   <div class="login-modal" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closeLoginModal()">✕</button>
     <h2 class="modal-title">Log In</h2>

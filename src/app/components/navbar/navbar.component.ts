@@ -4,10 +4,13 @@ import {
   OnDestroy,
   HostListener,
   inject,
+  ElementRef,
+  ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
-// import { AuthService } from "../../services/auth.service"; // Temporarily commented out to avoid circular dependency
+import { AuthService } from "../../services/auth.service";
+import { User } from "@angular/fire/auth";
 
 @Component({
   selector: "app-navbar",
@@ -18,13 +21,16 @@ import { Router } from "@angular/router";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private router = inject(Router);
-  // private authService = inject(AuthService); // Temporarily commented out
+  private authService = inject(AuthService);
 
   isScrolled = false;
   isMobileMenuOpen = false;
   activeSection = "home";
   showLoginModal = false;
-  // user$ = this.authService.user$; // Temporarily commented out
+  user$ = this.authService.user$;
+  userMenuOpen = false;
+
+  @ViewChild("userMenuContainer") userMenuContainer?: ElementRef<HTMLElement>;
 
   navItems = [
     { labelKey: "Features", section: "features", icon: "dashboard" },
@@ -109,17 +115,58 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.showLoginModal = false;
   }
 
-  loginWithGoogle(): void {
-    console.log('Login functionality temporarily disabled - Firebase not configured');
-    this.closeLoginModal();
-    // Temporarily disabled to avoid circular dependency
-    // this.authService
-    //   .signInWithGoogle()
-    //   .then(() => {
-    //     this.closeLoginModal();
-    //   })
-    //   .catch((err) => {
-    //     console.error("Google sign-in failed", err);
-    //   });
+  async loginWithGoogle(): Promise<void> {
+    try {
+      await this.authService.signInWithGoogle();
+    } catch (error) {
+      console.error("Google sign-in failed", error);
+    } finally {
+      this.closeLoginModal();
+    }
+  }
+
+  toggleUserMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.userMenuOpen = !this.userMenuOpen;
+  }
+
+  async logout(): Promise<void> {
+    this.userMenuOpen = false;
+    try {
+      await this.authService.signOut();
+    } catch (error) {
+      console.error("Failed to sign out", error);
+    }
+  }
+
+  getUserInitials(user: User | null): string {
+    if (!user) {
+      return "";
+    }
+    const displaySource = user.displayName || user.email || "";
+    const parts = displaySource.trim().split(/\s+/);
+    const initials = parts
+      .filter((part) => part.length > 0)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() ?? "");
+    return initials.join("") || "?";
+  }
+
+  @HostListener("document:click", ["$event"])
+  onDocumentClick(event: Event): void {
+    if (!this.userMenuOpen) {
+      return;
+    }
+
+    const target = event.target as Node | null;
+    if (
+      target &&
+      this.userMenuContainer?.nativeElement &&
+      this.userMenuContainer.nativeElement.contains(target)
+    ) {
+      return;
+    }
+
+    this.userMenuOpen = false;
   }
 }
