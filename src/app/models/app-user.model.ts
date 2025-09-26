@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'agent';
+export type UserRole = 'admin' | 'agent' | 'doctor';
 
 export interface AppUser {
   id: string; // matches Firebase UID or backend id
@@ -6,5 +6,5 @@ export interface AppUser {
   role: UserRole;
   displayName: string;
   createdAt: number;
+  photoURL?: string | null;
 }
-

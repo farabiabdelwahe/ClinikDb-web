@@ -11,6 +11,30 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
+    // Users can manage their profile; admins can manage any profile
+    match /users/{userId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && (
+          request.auth.uid == userId ||
+          (resource.data.email != null && resource.data.email == request.auth.token.email)
+        ));
+      allow create, update, delete: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+    }
+
+    match /admins/{adminId} {
+      allow read: if isAdmin() || (isSignedIn() && request.auth.uid == resource.data.userId);
+      allow write: if isAdmin();
+    }
+
+    match /agents/{agentId} {
+      allow read: if isAdmin()
+        || (isSignedIn() && (
+          (resource.data.userId != null && resource.data.userId == request.auth.uid) ||
+          (resource.data.email != null && resource.data.email == request.auth.token.email)
+        ));
+      allow write: if isAdmin();
+    }
+
     // Agents limited reads
     match /promocodes/{code} {
       allow read: if isAgent() && resource.data.assigned_agent_id == request.auth.uid;
@@ -30,4 +54,3 @@ service cloud.firestore {
     }
   }
 }
-
