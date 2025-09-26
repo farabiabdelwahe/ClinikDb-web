@@ -28,6 +28,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   activeSection = "home";
   showLoginModal = false;
   user$ = this.authService.user$;
+  appUser$ = this.authService.appUser$;
+  isAdmin$ = this.authService.isAdmin$;
   userMenuOpen = false;
 
   @ViewChild("userMenuContainer") userMenuContainer?: ElementRef<HTMLElement>;
@@ -150,6 +152,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? "");
     return initials.join("") || "?";
+  }
+
+  getUserPhoto(user: User | null): string | null {
+    if (!user) {
+      return null;
+    }
+
+    return (
+      user.photoURL ||
+      user.providerData?.find((profile) => !!profile?.photoURL)?.photoURL ||
+      null
+    );
   }
 
   @HostListener("document:click", ["$event"])

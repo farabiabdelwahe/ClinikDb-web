@@ -31,10 +31,11 @@
             [attr.aria-expanded]="userMenuOpen"
             aria-haspopup="true"
           >
-            <ng-container *ngIf="user.photoURL; else initials">
+            <ng-container *ngIf="getUserPhoto(user) as photo; else initials">
               <img
                 class="user-avatar"
-                [src]="user.photoURL"
+                [src]="photo"
+                referrerpolicy="no-referrer"
                 [alt]="user.displayName || user.email || 'User avatar'"
               />
             </ng-container>
@@ -43,10 +44,17 @@
                 {{ getUserInitials(user) }}
               </div>
             </ng-template>
-            <span class="user-name">{{ user.displayName || user.email }}</span>
+            <span class="user-name">
+              {{ (appUser$ | async)?.displayName || user.displayName || user.email }}
+            </span>
           </button>
           <div class="user-menu" *ngIf="userMenuOpen">
-            <button class="user-menu-item" type="button" (click)="goToDashboard()">
+            <button
+              class="user-menu-item"
+              type="button"
+              (click)="goToDashboard()"
+              *ngIf="isAdmin$ | async"
+            >
               Dashboard
             </button>
             <button class="user-menu-item" type="button" (click)="logout()">
@@ -63,7 +71,7 @@
       <button class="cta-button" type="button" (click)="scrollToSection('pricing')">
         Get Started
       </button>
-      <button class="demo-button" type="button" (click)="goToDashboard()">
+      <button class="demo-button" type="button" (click)="goToDashboard()" *ngIf="isAdmin$ | async">
         Dashboard
       </button>
     </div>
