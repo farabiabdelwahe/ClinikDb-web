@@ -84,66 +84,66 @@
 
       <!-- Overview -->
     <section *ngIf="activeTab==='overview'" class="space-y-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <!-- KPI: Total Commissions -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
-          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-indigo-50 to-transparent"></div>
-          <div class="flex items-center gap-4">
-            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-indigo-100 text-indigo-600">
+        <article class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">Total Commissions</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ totalCommission | currency:'USD' }}</div>
+              <p class="mt-1 text-xs text-slate-500">All-time commissions earned across agents.</p>
+            </div>
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
               <span class="sr-only">Total commissions</span>
               <lucide-angular [img]="ITrendingUp" size="20"></lucide-angular>
-            </div>
-            <div class="flex-1">
-              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">Total Commissions</div>
-              <div class="text-2xl font-semibold mt-1">{{ totalCommission | currency:'USD' }}</div>
-            </div>
+            </span>
           </div>
-        </div>
+        </article>
 
         <!-- KPI: Unpaid -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
-          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-amber-50 to-transparent"></div>
-          <div class="flex items-center gap-4">
-            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-amber-100 text-amber-600">
+        <article class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">This Month • Unpaid</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ monthUnpaid | currency:'USD' }}</div>
+              <p class="mt-1 text-xs text-slate-500">Outstanding commissions awaiting payout.</p>
+            </div>
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
               <span class="sr-only">Unpaid commissions this month</span>
               <lucide-angular [img]="IWallet" size="20"></lucide-angular>
-            </div>
-            <div class="flex-1">
-              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Unpaid</div>
-              <div class="text-2xl font-semibold mt-1">{{ monthUnpaid | currency:'USD' }}</div>
-            </div>
+            </span>
           </div>
-        </div>
+        </article>
 
         <!-- KPI: Paid -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
-          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-emerald-50 to-transparent"></div>
-          <div class="flex items-center gap-4">
-            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-emerald-100 text-emerald-600">
+        <article class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">This Month • Paid</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ monthPaid | currency:'USD' }}</div>
+              <p class="mt-1 text-xs text-slate-500">Settled commissions already transferred.</p>
+            </div>
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
               <span class="sr-only">Paid commissions this month</span>
               <lucide-angular [img]="ICreditCard" size="20"></lucide-angular>
-            </div>
-            <div class="flex-1">
-              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Paid</div>
-              <div class="text-2xl font-semibold mt-1">{{ monthPaid | currency:'USD' }}</div>
-            </div>
+            </span>
           </div>
-        </div>
+        </article>
 
         <!-- KPI: Transactions -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm relative overflow-hidden">
-          <div class="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-bl from-sky-50 to-transparent"></div>
-          <div class="flex items-center gap-4">
-            <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-sky-100 text-sky-600">
+        <article class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">This Month • Transactions</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ monthCount }}</div>
+              <p class="mt-1 text-xs text-slate-500">Completed subscription activations via agents.</p>
+            </div>
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
               <span class="sr-only">Transactions this month</span>
               <lucide-angular [img]="IPercent" size="20"></lucide-angular>
-            </div>
-            <div class="flex-1">
-              <div class="text-slate-500 text-xs font-medium tracking-wide uppercase">This Month • Transactions</div>
-              <div class="text-2xl font-semibold mt-1">{{ monthCount }}</div>
-            </div>
+            </span>
           </div>
-        </div>
+        </article>
       </div>
 
       <div class="bg-white p-6 rounded-xl shadow-sm">
@@ -158,62 +158,139 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <h3 class="font-semibold text-slate-800 mb-3">Create Promo Code</h3>
-          <form class="grid grid-cols-1 gap-3" (ngSubmit)="createPromo()">
-            <input [(ngModel)]="newPromo.code" name="code" placeholder="Code (e.g., ALICE20)" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <div class="grid grid-cols-2 gap-3">
-              <select [(ngModel)]="newPromo.discount_type" name="discount_type" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
-                <option value="percentage">Percentage</option>
-                <option value="fixed">Fixed</option>
-              </select>
-              <input [(ngModel)]="newPromo.discount_value" name="discount_value" type="number" placeholder="Value" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <article class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <header class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900">Create Promo Code</h3>
+              <p class="mt-1 text-sm text-slate-500">Launch a new offer and instantly share it with agents.</p>
             </div>
-            <select [(ngModel)]="newPromo.assigned_agent_id" name="assigned_agent_id" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
-              <option [ngValue]="undefined">Unassigned</option>
-              <option *ngFor="let a of (agents$ | async)" [value]="a.id">{{ a.displayName }}</option>
-            </select>
-            <button type="submit" class="btn btn-primary w-fit">Save Code</button>
-          </form>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <h3 class="font-semibold text-slate-800 mb-3">Onboard Subscription</h3>
-          <form class="grid grid-cols-1 gap-3" (ngSubmit)="onboardSubscription()">
-            <input [(ngModel)]="newSub.primary_email" name="primary_email" placeholder="Clinic email" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <div class="grid grid-cols-2 gap-3">
-              <select [(ngModel)]="newSub.plan_type" name="plan_type" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
-                <option value="basic">Basic</option>
-                <option value="pro">Pro</option>
-                <option value="enterprise">Enterprise</option>
-              </select>
-              <select [(ngModel)]="newSub.promocode_id" name="promocode_id" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
-                <option [ngValue]="undefined">No promo</option>
-                <option *ngFor="let p of (promoCodes$ | async)" [value]="p.id">{{ p.code }}</option>
-              </select>
+            <span class="hidden h-11 w-11 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 sm:flex">
+              <lucide-angular [img]="ITags" size="20"></lucide-angular>
+            </span>
+          </header>
+          <form class="mt-5 flex h-full flex-col" (ngSubmit)="createPromo()">
+            <div class="flex-1 space-y-4">
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Code
+                <input [(ngModel)]="newPromo.code" name="code" placeholder="e.g. ALICE20" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Discount type
+                  <select [(ngModel)]="newPromo.discount_type" name="discount_type" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="percentage">Percentage</option>
+                    <option value="fixed">Fixed amount</option>
+                  </select>
+                </label>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Discount value
+                  <input [(ngModel)]="newPromo.discount_value" name="discount_value" type="number" placeholder="10" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+              </div>
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Assign to agent
+                <select [(ngModel)]="newPromo.assigned_agent_id" name="assigned_agent_id" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                  <option [ngValue]="undefined">Unassigned</option>
+                  <option *ngFor="let a of (agents$ | async)" [value]="a.id">{{ a.displayName }}</option>
+                </select>
+              </label>
+              <p class="text-xs text-slate-500">Leave unassigned to allow any agent to use the code. Codes activate immediately once saved.</p>
             </div>
-            <button type="submit" class="btn btn-primary w-fit">Create Subscription</button>
-            <p class="text-xs text-slate-500">Payment method defaults to Flouci (mock).</p>
+            <button type="submit" class="btn btn-primary mt-4 w-full sm:w-auto sm:self-end">Save Code</button>
           </form>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <h3 class="font-semibold text-slate-800 mb-3">Invite Agent</h3>
-          <form class="grid grid-cols-1 gap-3" (ngSubmit)="inviteAgent()">
-            <input [(ngModel)]="newAgent.displayName" name="agent_display_name" placeholder="Agent name" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <input [(ngModel)]="newAgent.email" name="agent_email" type="email" placeholder="Agent email" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <button type="submit" class="btn btn-primary w-fit">Send Invite</button>
-            <p class="text-xs text-slate-500">We create an agent record and grant access once they log in with this email.</p>
+        </article>
+
+        <article class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <header class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900">Onboard Subscription</h3>
+              <p class="mt-1 text-sm text-slate-500">Kick off a new clinic subscription with guided defaults.</p>
+            </div>
+            <span class="hidden h-11 w-11 items-center justify-center rounded-full bg-sky-100 text-sky-600 sm:flex">
+              <lucide-angular [img]="ICreditCard" size="20"></lucide-angular>
+            </span>
+          </header>
+          <form class="mt-5 flex h-full flex-col" (ngSubmit)="onboardSubscription()">
+            <div class="flex-1 space-y-4">
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Clinic email
+                <input [(ngModel)]="newSub.primary_email" name="primary_email" placeholder="clinic@sample.tn" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Plan type
+                  <select [(ngModel)]="newSub.plan_type" name="plan_type" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="basic">Basic</option>
+                    <option value="pro">Pro</option>
+                    <option value="enterprise">Enterprise</option>
+                  </select>
+                </label>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Promo code
+                  <select [(ngModel)]="newSub.promocode_id" name="promocode_id" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option [ngValue]="undefined">No promo</option>
+                    <option *ngFor="let p of (promoCodes$ | async)" [value]="p.id">{{ p.code }}</option>
+                  </select>
+                </label>
+              </div>
+              <p class="text-xs text-slate-500">Payment method defaults to Flouci (mock) and can be edited later.</p>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4 w-full sm:w-auto sm:self-end">Create Subscription</button>
           </form>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-          <h3 class="font-semibold text-slate-800 mb-3">Register Doctor</h3>
-          <form class="grid grid-cols-1 gap-3" (ngSubmit)="inviteDoctor()">
-            <input [(ngModel)]="newDoctor.displayName" name="doctor_display_name" placeholder="Doctor name" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <input [(ngModel)]="newDoctor.email" name="doctor_email" type="email" placeholder="Doctor email" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
-            <button type="submit" class="btn btn-primary w-fit">Register Doctor</button>
-            <p class="text-xs text-slate-500">Doctors receive standard access; they'll appear in the roster when they authenticate.</p>
+        </article>
+
+        <article class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <header class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900">Invite Agent</h3>
+              <p class="mt-1 text-sm text-slate-500">Send an invite link that activates access on first login.</p>
+            </div>
+            <span class="hidden h-11 w-11 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 sm:flex">
+              <lucide-angular [img]="IUsers" size="20"></lucide-angular>
+            </span>
+          </header>
+          <form class="mt-5 flex h-full flex-col" (ngSubmit)="inviteAgent()">
+            <div class="flex-1 space-y-4">
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Agent name
+                <input [(ngModel)]="newAgent.displayName" name="agent_display_name" placeholder="Alex Doe" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Agent email
+                <input [(ngModel)]="newAgent.email" name="agent_email" type="email" placeholder="agent@company.tn" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <p class="text-xs text-slate-500">We create an agent record and grant access once they authenticate with this email.</p>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4 w-full sm:w-auto sm:self-end">Send Invite</button>
           </form>
-        </div>
+        </article>
+
+        <article class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <header class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-slate-900">Register Doctor</h3>
+              <p class="mt-1 text-sm text-slate-500">Add doctors ahead of time so they can sign in without delay.</p>
+            </div>
+            <span class="hidden h-11 w-11 items-center justify-center rounded-full bg-purple-100 text-purple-600 sm:flex">
+              <lucide-angular [img]="IUsers" size="20"></lucide-angular>
+            </span>
+          </header>
+          <form class="mt-5 flex h-full flex-col" (ngSubmit)="inviteDoctor()">
+            <div class="flex-1 space-y-4">
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Doctor name
+                <input [(ngModel)]="newDoctor.displayName" name="doctor_display_name" placeholder="Dr. Jane Smith" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                Doctor email
+                <input [(ngModel)]="newDoctor.email" name="doctor_email" type="email" placeholder="doctor@clinic.tn" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+              </label>
+              <p class="text-xs text-slate-500">Doctors receive standard access and appear in the roster after their first login.</p>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4 w-full sm:w-auto sm:self-end">Register Doctor</button>
+          </form>
+        </article>
       </div>
     </section>
 

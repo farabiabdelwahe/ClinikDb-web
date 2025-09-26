@@ -11,6 +11,8 @@ import { Subscription } from '../models/subscription.model';
 import { AgentPromoCodeCommission } from '../models/commission.model';
 import { AppUser } from '../models/app-user.model';
 import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, TrendingUp, BadgePercent } from 'lucide-angular';
+import { environment } from '../../environments/environment';
+import dashboardDemo from '../../assets/mock/admin-dashboard-demo.json';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -20,6 +22,8 @@ import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, 
 })
 export class AdminDashboardComponent implements OnInit {
   private data = inject(AdminDataService);
+  private readonly useDemoData = environment.features?.useDashboardMockData === true;
+  private readonly demoCharts = this.useDemoData ? dashboardDemo?.overview?.charts ?? null : null;
 
   // Icons
   readonly ILayout = LayoutDashboard;
@@ -61,10 +65,10 @@ export class AdminDashboardComponent implements OnInit {
 
   // Charts
   lineChartData: ChartData<'line'> = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: this.demoCharts?.commissionsByMonth?.labels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
-        data: [120, 90, 150, 200, 240, 210, 260, 300, 270, 320, 310, 380],
+        data: this.demoCharts?.commissionsByMonth?.values ?? [120, 90, 150, 200, 240, 210, 260, 300, 270, 320, 310, 380],
         label: 'Commission ($)',
         tension: 0.35,
         borderColor: '#6366f1',
@@ -86,10 +90,10 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   doughnutChartData: ChartData<'doughnut'> = {
-    labels: ['Direct', 'Referral', 'Promo Codes'],
+    labels: this.demoCharts?.acquisitionSplit?.labels ?? ['Direct', 'Referral', 'Promo Codes'],
     datasets: [
       {
-        data: [45, 25, 30],
+        data: this.demoCharts?.acquisitionSplit?.values ?? [45, 25, 30],
         backgroundColor: ['#3b82f6', '#8b5cf6', '#22c55e']
       }
     ]
