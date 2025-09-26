@@ -25,6 +25,8 @@ export const environment = {
   features: {
     agentCommission: true,
     geoIpDetection: true,
+    useDashboardMockData: true,
+    bypassAdminGuard: true,
   },
 
   /**

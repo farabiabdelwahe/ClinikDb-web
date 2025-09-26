@@ -20,6 +20,8 @@ import { PromoCode } from '../models/promocode.model';
 import { AgentPromoCodeCommission, CommissionStatus } from '../models/commission.model';
 import { Subscription } from '../models/subscription.model';
 import { AppUser } from '../models/app-user.model';
+import { environment } from '../../environments/environment';
+import dashboardDemo from '../../assets/mock/admin-dashboard-demo.json';
 
 // Simple seeded prices. Adjust as needed.
 const PLAN_PRICES: Record<Subscription['plan_type'], number> = {
@@ -32,8 +34,10 @@ const COMMISSION_RATE = 0.2; // 20% of plan price for first month
 
 @Injectable({ providedIn: 'root' })
 export class AdminDataService {
-  private firestore = inject(Firestore, { optional: true });
-  private readonly useMock = !this.firestore;
+  private firestore: Firestore | null = environment.features?.useDashboardMockData ? null : inject(Firestore, { optional: true });
+  private readonly useMock = !this.firestore || environment.features?.useDashboardMockData === true;
+
+  private readonly demoMonthTotals = environment.features?.useDashboardMockData ? (dashboardDemo?.overview?.metrics?.month ?? null) : null;
 
   private agents$ = new BehaviorSubject<Agent[]>([]);
   private promoCodes$ = new BehaviorSubject<PromoCode[]>([]);
@@ -99,22 +103,100 @@ export class AdminDataService {
     }
   }
 
-  // Seed with minimal data for demo/dev
+  // Seed with mock data sourced from JSON for demo/dev
   private seed(): void {
     const now = Date.now();
+    const dayMs = 86_400_000;
+    const fromDaysAgo = (daysAgo?: number): number => {
+      if (typeof daysAgo === 'number') {
+        return now - daysAgo * dayMs;
+      }
+      return now;
+    };
+
+    if (environment.features?.useDashboardMockData) {
+      const data = dashboardDemo as any;
+
+      const agents: Agent[] = (data?.agents ?? []).map((agent: any) => ({
+        id: agent.id,
+        displayName: agent.displayName,
+        email: agent.email ?? undefined,
+        userId: agent.userId ?? undefined,
+        createdAt: fromDaysAgo(agent.createdAtDaysAgo),
+      }));
+      this.agents$.next(agents);
+
+      const promoCodes: PromoCode[] = (data?.promoCodes ?? []).map((promo: any) => ({
+        id: promo.id,
+        code: promo.code,
+        assigned_agent_id: promo.assigned_agent_id ?? undefined,
+        linked_subscription_id: promo.linked_subscription_id ?? undefined,
+        discount_type: promo.discount_type,
+        discount_value: Number(promo.discount_value ?? 0),
+        valid_from: promo.valid_from_days_ago !== undefined ? fromDaysAgo(promo.valid_from_days_ago) : undefined,
+        valid_to: promo.valid_to_days_ago !== undefined ? fromDaysAgo(promo.valid_to_days_ago) : undefined,
+        redemption_count: Number(promo.redemption_count ?? 0),
+        status: promo.status ?? 'inactive',
+        createdAt: fromDaysAgo(promo.createdAtDaysAgo),
+        updatedAt: promo.updatedAtDaysAgo !== undefined ? fromDaysAgo(promo.updatedAtDaysAgo) : undefined,
+        created_by_admin_id: promo.created_by_admin_id ?? undefined,
+      }));
+      this.promoCodes$.next(promoCodes);
+
+      const subscriptions: Subscription[] = (data?.subscriptions ?? []).map((sub: any) => ({
+        id: sub.id,
+        promocode_id: sub.promocode_id ?? undefined,
+        primary_email: sub.primary_email,
+        status: sub.status ?? 'active',
+        start_date: fromDaysAgo(sub.start_date_days_ago ?? sub.createdAtDaysAgo),
+        end_date: sub.end_date_days_ago !== undefined ? fromDaysAgo(sub.end_date_days_ago) : undefined,
+        payment_method: sub.payment_method ?? 'flouci',
+        transaction_record: sub.transaction_record ?? undefined,
+        plan_type: sub.plan_type ?? 'basic',
+        createdAt: fromDaysAgo(sub.createdAtDaysAgo ?? sub.start_date_days_ago),
+        updatedAt: sub.updatedAtDaysAgo !== undefined ? fromDaysAgo(sub.updatedAtDaysAgo) : undefined,
+      }));
+      this.subscriptions$.next(subscriptions);
+
+      const commissions: AgentPromoCodeCommission[] = (data?.commissions ?? []).map((commission: any) => ({
+        id: commission.id,
+        agent_id: commission.agent_id,
+        promocode_id: commission.promocode_id,
+        subscription_id: commission.subscription_id ?? undefined,
+        commission_status: commission.commission_status ?? 'unpaid',
+        amount: Number(commission.amount ?? 0),
+        currency: commission.currency ?? 'USD',
+        createdAt: fromDaysAgo(commission.createdAtDaysAgo),
+        updatedAt: fromDaysAgo(commission.updatedAtDaysAgo ?? commission.createdAtDaysAgo),
+      }));
+      this.commissions$.next(commissions);
+
+      const doctors: AppUser[] = (data?.doctors ?? []).map((doctor: any) => ({
+        id: doctor.id,
+        email: doctor.email,
+        role: 'doctor',
+        displayName: doctor.displayName,
+        createdAt: fromDaysAgo(doctor.createdAtDaysAgo),
+        photoURL: doctor.photoURL ?? null,
+      }));
+      this.doctors$.next(doctors);
+
+      return;
+    }
+
+    const nowFallback = Date.now();
     const agentA: Agent = {
       id: 'ag_1',
       displayName: 'Alice Sales',
       email: 'alice@agency.com',
-      createdAt: now - 1000 * 60 * 60 * 24 * 40
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 40
     };
     const agentB: Agent = {
       id: 'ag_2',
       displayName: 'Bob Sales',
       email: 'bob@agency.com',
-      createdAt: now - 1000 * 60 * 60 * 24 * 10
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 10
     };
-
     const promo1: PromoCode = {
       id: 'pc_1',
       code: 'ALICE20',
@@ -123,7 +205,7 @@ export class AdminDataService {
       discount_value: 20,
       redemption_count: 2,
       status: 'active',
-      createdAt: now - 1000 * 60 * 60 * 24 * 30
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 30
     };
     const promo2: PromoCode = {
       id: 'pc_2',
@@ -133,31 +215,28 @@ export class AdminDataService {
       discount_value: 10,
       redemption_count: 1,
       status: 'active',
-      createdAt: now - 1000 * 60 * 60 * 24 * 15
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 15
     };
-
     const s1: Subscription = {
       id: 'sub_1',
       promocode_id: promo1.id,
       primary_email: 'clinic.one@example.com',
       status: 'active',
-      start_date: now - 1000 * 60 * 60 * 24 * 14,
+      start_date: nowFallback - 1000 * 60 * 60 * 24 * 14,
       plan_type: 'pro',
       payment_method: 'flouci',
-      createdAt: now - 1000 * 60 * 60 * 24 * 14
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 14
     };
-
     const s2: Subscription = {
       id: 'sub_2',
       promocode_id: promo2.id,
       primary_email: 'clinic.two@example.com',
       status: 'active',
-      start_date: now - 1000 * 60 * 60 * 24 * 3,
+      start_date: nowFallback - 1000 * 60 * 60 * 24 * 3,
       plan_type: 'basic',
       payment_method: 'flouci',
-      createdAt: now - 1000 * 60 * 60 * 24 * 3
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 3
     };
-
     const c1: AgentPromoCodeCommission = {
       id: 'cm_1',
       agent_id: agentA.id,
@@ -167,9 +246,8 @@ export class AdminDataService {
       amount: PLAN_PRICES[s1.plan_type] * COMMISSION_RATE,
       currency: 'USD',
       createdAt: s1.start_date,
-      updatedAt: now
+      updatedAt: nowFallback
     };
-
     const c2: AgentPromoCodeCommission = {
       id: 'cm_2',
       agent_id: agentB.id,
@@ -179,20 +257,18 @@ export class AdminDataService {
       amount: PLAN_PRICES[s2.plan_type] * COMMISSION_RATE,
       currency: 'USD',
       createdAt: s2.start_date,
-      updatedAt: now
+      updatedAt: nowFallback
     };
-
     this.agents$.next([agentA, agentB]);
     this.promoCodes$.next([promo1, promo2]);
     this.subscriptions$.next([s1, s2]);
     this.commissions$.next([c1, c2]);
-
     const doctor: AppUser = {
       id: 'doc_1',
       email: 'dr.jane@example.com',
       role: 'doctor',
       displayName: 'Dr. Jane Smith',
-      createdAt: now - 1000 * 60 * 60 * 24 * 20,
+      createdAt: nowFallback - 1000 * 60 * 60 * 24 * 20,
       photoURL: null,
     };
     this.doctors$.next([doctor]);
@@ -591,6 +667,9 @@ export class AdminDataService {
   getTotalsForMonth(year: number, monthIndex: number): Observable<{
     unpaid: number; paid: number; count: number;
   }> {
+    if (!this.firestore && this.demoMonthTotals) {
+      return of(this.demoMonthTotals);
+    }
     const start = new Date(year, monthIndex, 1).getTime();
     const end = new Date(year, monthIndex + 1, 0, 23, 59, 59, 999).getTime();
     return this.getCommissions().pipe(

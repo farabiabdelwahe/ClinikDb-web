@@ -13,6 +13,8 @@ export const environment = {
   features: {
     agentCommission: false,
     geoIpDetection: true,
+    useDashboardMockData: true,
+    bypassAdminGuard: false,
   },
 
   // Firebase configuration (all optional here; expected to be provided at build time

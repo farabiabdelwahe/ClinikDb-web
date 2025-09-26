@@ -26,6 +26,7 @@ import {
 import { Timestamp } from 'firebase/firestore';
 import { BehaviorSubject, map } from 'rxjs';
 import { AppUser, UserRole } from '../models/app-user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -53,7 +54,19 @@ export class AuthService {
         }
       });
     } else {
-      console.warn('Firebase Auth not configured - auth functionality disabled');
+      if (environment.features?.useDashboardMockData) {
+        const demoAdmin: AppUser = {
+          id: 'demo-admin',
+          email: 'admin@example.com',
+          displayName: 'Demo Admin',
+          role: 'admin',
+          createdAt: Date.now(),
+          photoURL: null,
+        };
+        this.appUserSubject.next(demoAdmin);
+      } else {
+        console.warn('Firebase Auth not configured - auth functionality disabled');
+      }
     }
   }
 
