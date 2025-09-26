@@ -95,30 +95,39 @@
 
           <!-- Entry / Validation State -->
           <div *ngIf="promoState().status !== 'applied'" class="referral-entry">
-            <mat-form-field
-              appearance="outline"
-              class="referral-field"
-              subscriptSizing="dynamic"
-            >
-              <mat-label>{{
-                "pricing.referral.placeholder" | translate
-              }}</mat-label>
-              <input
-                matInput
-                [value]="promoInput"
-                (input)="onReferralInput($event.target.value)"
-                [placeholder]="'pricing.referral.example' | translate"
-                autocomplete="off"
-                spellcheck="false"
-                maxlength="18"
-                aria-describedby="referral-help referral-status"
-                [disabled]="promoState().status === 'validating'"
-              />
-              <lucide-angular matSuffix [img]="Tag" size="18"></lucide-angular>
-              <mat-hint id="referral-help">
+            <div class="referral-field">
+              <label class="referral-label" for="referral-code"
+                >{{ "pricing.referral.placeholder" | translate }}</label
+              >
+              <div
+                class="referral-input-wrapper"
+                [class.disabled]="promoState().status === 'validating'"
+              >
+                <input
+                  id="referral-code"
+                  type="text"
+                  class="referral-input"
+                  [value]="promoInput"
+                  (input)="onReferralInput($event.target.value)"
+                  [placeholder]="'pricing.referral.example' | translate"
+                  autocomplete="off"
+                  spellcheck="false"
+                  maxlength="18"
+                  aria-describedby="referral-help referral-status"
+                  [attr.aria-invalid]="promoState().status === 'error'"
+                  [disabled]="promoState().status === 'validating'"
+                />
+                <lucide-angular
+                  class="referral-icon"
+                  [img]="Tag"
+                  size="18"
+                  aria-hidden="true"
+                ></lucide-angular>
+              </div>
+              <p id="referral-help" class="referral-hint">
                 {{ "pricing.referral.hint" | translate }}
-              </mat-hint>
-            </mat-form-field>
+              </p>
+            </div>
 
             <div class="referral-actions">
               <button
