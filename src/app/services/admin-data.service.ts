@@ -1,9 +1,25 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  serverTimestamp,
+  query,
+  where,
+  limit,
+  getDocs,
+  increment,
+} from '@angular/fire/firestore';
+import { BehaviorSubject, Observable, from, map, of } from 'rxjs';
 import { Agent } from '../models/agent.model';
 import { PromoCode } from '../models/promocode.model';
 import { AgentPromoCodeCommission, CommissionStatus } from '../models/commission.model';
 import { Subscription } from '../models/subscription.model';
+import { AppUser } from '../models/app-user.model';
 
 // Simple seeded prices. Adjust as needed.
 const PLAN_PRICES: Record<Subscription['plan_type'], number> = {
@@ -16,13 +32,71 @@ const COMMISSION_RATE = 0.2; // 20% of plan price for first month
 
 @Injectable({ providedIn: 'root' })
 export class AdminDataService {
+  private firestore = inject(Firestore, { optional: true });
+  private readonly useMock = !this.firestore;
+
   private agents$ = new BehaviorSubject<Agent[]>([]);
   private promoCodes$ = new BehaviorSubject<PromoCode[]>([]);
   private subscriptions$ = new BehaviorSubject<Subscription[]>([]);
   private commissions$ = new BehaviorSubject<AgentPromoCodeCommission[]>([]);
+  private doctors$ = new BehaviorSubject<AppUser[]>([]);
 
   constructor() {
-    this.seed();
+    if (this.useMock) {
+      this.seed();
+    }
+  }
+
+  private toMillis(value: any): number {
+    if (!value) {
+      return Date.now();
+    }
+    if (typeof value === 'number') {
+      return value;
+    }
+    if (value.toMillis) {
+      return value.toMillis();
+    }
+    if (typeof value === 'object' && 'seconds' in value) {
+      return Number(value.seconds) * 1000 + Math.floor(Number(value.nanoseconds ?? 0) / 1_000_000);
+    }
+    return Date.now();
+  }
+
+  private async ensureUserRecord(
+    email: string,
+    role: 'agent' | 'doctor',
+    displayName?: string,
+    extras: Record<string, unknown> = {}
+  ): Promise<string | null> {
+    if (!this.firestore) {
+      return null;
+    }
+
+    const normalizedEmail = email.toLowerCase();
+    const usersRef = collection(this.firestore, 'users');
+    const existing = await getDocs(
+      query(usersRef, where('email', '==', normalizedEmail), limit(1))
+    );
+
+    if (existing.empty) {
+      const created = await addDoc(usersRef, {
+        email: normalizedEmail,
+        role,
+        displayName: displayName ?? normalizedEmail,
+        createdAt: serverTimestamp(),
+        ...extras,
+      });
+      return created.id;
+    } else {
+      const docRef = existing.docs[0].ref;
+      await updateDoc(docRef, {
+        role,
+        displayName: displayName ?? existing.docs[0].data()['displayName'],
+        ...extras,
+      });
+      return docRef.id;
+    }
   }
 
   // Seed with minimal data for demo/dev
@@ -112,90 +186,405 @@ export class AdminDataService {
     this.promoCodes$.next([promo1, promo2]);
     this.subscriptions$.next([s1, s2]);
     this.commissions$.next([c1, c2]);
+
+    const doctor: AppUser = {
+      id: 'doc_1',
+      email: 'dr.jane@example.com',
+      role: 'doctor',
+      displayName: 'Dr. Jane Smith',
+      createdAt: now - 1000 * 60 * 60 * 24 * 20,
+      photoURL: null,
+    };
+    this.doctors$.next([doctor]);
   }
 
   // Streams
-  getAgents(): Observable<Agent[]> { return this.agents$.asObservable(); }
-  getPromoCodes(): Observable<PromoCode[]> { return this.promoCodes$.asObservable(); }
-  getSubscriptions(): Observable<Subscription[]> { return this.subscriptions$.asObservable(); }
-  getCommissions(): Observable<AgentPromoCodeCommission[]> { return this.commissions$.asObservable(); }
+  getAgents(): Observable<Agent[]> {
+    if (!this.firestore) {
+      return this.agents$.asObservable();
+    }
 
-  // CRUD-like operations (mock)
-  createAgent(input: Omit<Agent, 'id' | 'createdAt'> & Partial<Pick<Agent,'createdAt'>>): Observable<Agent> {
-    const agent: Agent = { id: 'ag_' + crypto.randomUUID(), createdAt: input.createdAt ?? Date.now(), displayName: input.displayName, email: input.email, userId: input.userId };
-    this.agents$.next([...this.agents$.value, agent]);
-    return of(agent);
+    const agentsRef = collection(this.firestore, 'agents');
+    return collectionData(agentsRef, { idField: 'id' }).pipe(
+      map((docs) =>
+        docs.map((doc: any) => ({
+          id: doc.id as string,
+          displayName: doc.displayName ?? '',
+          email: doc.email ?? undefined,
+          userId: doc.userId ?? undefined,
+          createdAt: this.toMillis(doc.createdAt),
+        }))
+      )
+    );
   }
 
-  createPromoCode(input: Omit<PromoCode, 'id' | 'createdAt' | 'updatedAt' | 'redemption_count' | 'status'> & { status?: PromoCode['status'] }): Observable<PromoCode> {
-    const promo: PromoCode = {
-      id: 'pc_' + crypto.randomUUID(),
+  getPromoCodes(): Observable<PromoCode[]> {
+    if (!this.firestore) {
+      return this.promoCodes$.asObservable();
+    }
+
+    const promoRef = collection(this.firestore, 'promocodes');
+    return collectionData(promoRef, { idField: 'id' }).pipe(
+      map((docs) =>
+        docs.map((doc: any) => ({
+          id: doc.id as string,
+          code: doc.code,
+          assigned_agent_id: doc.assigned_agent_id ?? undefined,
+          linked_subscription_id: doc.linked_subscription_id ?? undefined,
+          discount_type: doc.discount_type,
+          discount_value: Number(doc.discount_value ?? 0),
+          valid_from: doc.valid_from ? this.toMillis(doc.valid_from) : undefined,
+          valid_to: doc.valid_to ? this.toMillis(doc.valid_to) : undefined,
+          redemption_count: Number(doc.redemption_count ?? 0),
+          status: doc.status ?? 'inactive',
+          createdAt: this.toMillis(doc.createdAt),
+          updatedAt: doc.updatedAt ? this.toMillis(doc.updatedAt) : undefined,
+          created_by_admin_id: doc.created_by_admin_id ?? undefined,
+        }))
+      )
+    );
+  }
+
+  getSubscriptions(): Observable<Subscription[]> {
+    if (!this.firestore) {
+      return this.subscriptions$.asObservable();
+    }
+
+    const subRef = collection(this.firestore, 'subscriptions');
+    return collectionData(subRef, { idField: 'id' }).pipe(
+      map((docs) =>
+        docs.map((doc: any) => ({
+          id: doc.id as string,
+          promocode_id: doc.promocode_id ?? undefined,
+          primary_email: doc.primary_email,
+          status: doc.status ?? 'active',
+          start_date: this.toMillis(doc.start_date),
+          end_date: doc.end_date ? this.toMillis(doc.end_date) : undefined,
+          payment_method: doc.payment_method ?? undefined,
+          transaction_record: doc.transaction_record ?? undefined,
+          plan_type: doc.plan_type ?? 'basic',
+          createdAt: this.toMillis(doc.createdAt),
+          updatedAt: doc.updatedAt ? this.toMillis(doc.updatedAt) : undefined,
+        }))
+      )
+    );
+  }
+
+  getCommissions(): Observable<AgentPromoCodeCommission[]> {
+    if (!this.firestore) {
+      return this.commissions$.asObservable();
+    }
+
+    const commissionsRef = collection(this.firestore, 'agent_promocode_commissions');
+    return collectionData(commissionsRef, { idField: 'id' }).pipe(
+      map((docs) =>
+        docs.map((doc: any) => ({
+          id: doc.id as string,
+          agent_id: doc.agent_id,
+          promocode_id: doc.promocode_id,
+          subscription_id: doc.subscription_id ?? undefined,
+          commission_status: doc.commission_status ?? 'unpaid',
+          amount: Number(doc.amount ?? 0),
+          currency: doc.currency ?? 'USD',
+          createdAt: this.toMillis(doc.createdAt),
+          updatedAt: this.toMillis(doc.updatedAt),
+        }))
+      )
+    );
+  }
+
+  getDoctors(): Observable<AppUser[]> {
+    if (!this.firestore) {
+      return this.doctors$.asObservable();
+    }
+
+    const usersRef = collection(this.firestore, 'users');
+    const doctorsQuery = query(usersRef, where('role', '==', 'doctor'));
+    return collectionData(doctorsQuery, { idField: 'id' }).pipe(
+      map((docs) =>
+        docs.map((doc: any) => ({
+          id: doc.id as string,
+          email: doc.email ?? '',
+          role: 'doctor',
+          displayName: doc.displayName ?? doc.email ?? '',
+          createdAt: this.toMillis(doc.createdAt),
+          photoURL: doc.photoURL ?? null,
+        }))
+      )
+    );
+  }
+
+  // CRUD-like operations (mock)
+  createAgent(
+    input: Omit<Agent, 'id' | 'createdAt'> & Partial<Pick<Agent, 'createdAt'>>
+  ): Observable<Agent> {
+    if (!this.firestore) {
+      const agent: Agent = {
+        id: 'ag_' + crypto.randomUUID(),
+        createdAt: input.createdAt ?? Date.now(),
+        displayName: input.displayName,
+        email: input.email,
+        userId: input.userId,
+      };
+      this.agents$.next([...this.agents$.value, agent]);
+      return of(agent);
+    }
+
+    return from(this.createAgentInFirestore(input));
+  }
+
+  inviteAgent(
+    input: Omit<Agent, 'id' | 'createdAt'> & Partial<Pick<Agent, 'createdAt'>>
+  ): Observable<Agent> {
+    return this.createAgent(input);
+  }
+
+  private async createAgentInFirestore(
+    input: Omit<Agent, 'id' | 'createdAt'> & Partial<Pick<Agent, 'createdAt'>>
+  ): Promise<Agent> {
+    const agentsRef = collection(this.firestore!, 'agents');
+    const normalizedEmail = input.email?.toLowerCase();
+    const docRef = await addDoc(agentsRef, {
+      displayName: input.displayName,
+      email: normalizedEmail ?? null,
+      userId: input.userId ?? null,
+      createdAt: serverTimestamp(),
+    });
+
+    if (normalizedEmail) {
+      await this.ensureUserRecord(normalizedEmail, 'agent', input.displayName, {
+        linkedAgentId: docRef.id,
+      });
+    }
+
+    return {
+      id: docRef.id,
+      displayName: input.displayName,
+      email: normalizedEmail ?? undefined,
+      userId: input.userId,
+      createdAt: Date.now(),
+    };
+  }
+
+  inviteDoctor(input: { email: string; displayName: string }): Observable<AppUser> {
+    if (!this.firestore) {
+      const doctor: AppUser = {
+        id: 'doc_' + crypto.randomUUID(),
+        email: input.email,
+        displayName: input.displayName,
+        role: 'doctor',
+        createdAt: Date.now(),
+        photoURL: null,
+      };
+      this.doctors$.next([doctor, ...this.doctors$.value]);
+      return of(doctor);
+    }
+
+    return from(this.createDoctorInFirestore(input));
+  }
+
+  private async createDoctorInFirestore(input: {
+    email: string;
+    displayName: string;
+  }): Promise<AppUser> {
+    const id = await this.ensureUserRecord(input.email, 'doctor', input.displayName);
+    return {
+      id: id ?? 'doctor_' + crypto.randomUUID(),
+      email: input.email.toLowerCase(),
+      displayName: input.displayName,
+      role: 'doctor',
+      createdAt: Date.now(),
+      photoURL: null,
+    };
+  }
+
+  createPromoCode(
+    input: Omit<PromoCode, 'id' | 'createdAt' | 'updatedAt' | 'redemption_count' | 'status'> &
+      { status?: PromoCode['status'] }
+  ): Observable<PromoCode> {
+    if (!this.firestore) {
+      const promo: PromoCode = {
+        id: 'pc_' + crypto.randomUUID(),
+        code: input.code,
+        assigned_agent_id: input.assigned_agent_id,
+        linked_subscription_id: input.linked_subscription_id,
+        discount_type: input.discount_type,
+        discount_value: input.discount_value,
+        valid_from: input.valid_from,
+        valid_to: input.valid_to,
+        redemption_count: 0,
+        status: input.status ?? 'active',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        created_by_admin_id: input.created_by_admin_id,
+      };
+      this.promoCodes$.next([promo, ...this.promoCodes$.value]);
+      return of(promo);
+    }
+
+    const payload = {
       code: input.code,
-      assigned_agent_id: input.assigned_agent_id,
-      linked_subscription_id: input.linked_subscription_id,
+      assigned_agent_id: input.assigned_agent_id ?? null,
+      linked_subscription_id: input.linked_subscription_id ?? null,
       discount_type: input.discount_type,
       discount_value: input.discount_value,
-      valid_from: input.valid_from,
-      valid_to: input.valid_to,
+      valid_from: input.valid_from ?? null,
+      valid_to: input.valid_to ?? null,
       redemption_count: 0,
       status: input.status ?? 'active',
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      created_by_admin_id: input.created_by_admin_id
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      created_by_admin_id: input.created_by_admin_id ?? null,
     };
-    this.promoCodes$.next([promo, ...this.promoCodes$.value]);
-    return of(promo);
+
+    return from(addDoc(collection(this.firestore!, 'promocodes'), payload)).pipe(
+      map((ref) => ({
+        id: ref.id,
+        code: input.code,
+        assigned_agent_id: input.assigned_agent_id,
+        linked_subscription_id: input.linked_subscription_id,
+        discount_type: input.discount_type,
+        discount_value: input.discount_value,
+        valid_from: input.valid_from,
+        valid_to: input.valid_to,
+        redemption_count: 0,
+        status: input.status ?? 'active',
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        created_by_admin_id: input.created_by_admin_id,
+      }))
+    );
   }
 
   onboardSubscription(input: Omit<Subscription, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'start_date'> & { start_date?: number; status?: Subscription['status'] }): Observable<Subscription> {
-    const sub: Subscription = {
-      id: 'sub_' + crypto.randomUUID(),
-      promocode_id: input.promocode_id,
-      primary_email: input.primary_email,
+    if (!this.firestore) {
+      const sub: Subscription = {
+        id: 'sub_' + crypto.randomUUID(),
+        promocode_id: input.promocode_id,
+        primary_email: input.primary_email,
+        status: input.status ?? 'active',
+        start_date: input.start_date ?? Date.now(),
+        end_date: input.end_date,
+        payment_method: input.payment_method ?? 'flouci',
+        transaction_record: input.transaction_record,
+        plan_type: input.plan_type,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      };
+      this.subscriptions$.next([sub, ...this.subscriptions$.value]);
+
+      if (sub.promocode_id) {
+        const promos = this.promoCodes$.value;
+        const promo = promos.find((x) => x.id === sub.promocode_id);
+        if (promo) {
+          promo.redemption_count += 1;
+          promo.updatedAt = Date.now();
+          this.promoCodes$.next([...promos]);
+
+          if (promo.assigned_agent_id) {
+            const commission: AgentPromoCodeCommission = {
+              id: 'cm_' + crypto.randomUUID(),
+              agent_id: promo.assigned_agent_id,
+              promocode_id: promo.id,
+              subscription_id: sub.id,
+              commission_status: 'unpaid',
+              amount: PLAN_PRICES[sub.plan_type] * COMMISSION_RATE,
+              currency: 'USD',
+              createdAt: sub.start_date,
+              updatedAt: Date.now(),
+            };
+            this.commissions$.next([commission, ...this.commissions$.value]);
+          }
+        }
+      }
+
+      return of(sub);
+    }
+
+    return from(this.onboardSubscriptionInFirestore(input));
+  }
+
+  private async onboardSubscriptionInFirestore(
+    input: Omit<Subscription, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'start_date'> &
+      { start_date?: number; status?: Subscription['status'] }
+  ): Promise<Subscription> {
+    const subsRef = collection(this.firestore!, 'subscriptions');
+    const normalizedEmail = input.primary_email.toLowerCase();
+    const now = Date.now();
+
+    const payload = {
+      promocode_id: input.promocode_id ?? null,
+      primary_email: normalizedEmail,
       status: input.status ?? 'active',
-      start_date: input.start_date ?? Date.now(),
-      end_date: input.end_date,
+      start_date: input.start_date ?? now,
+      end_date: input.end_date ?? null,
       payment_method: input.payment_method ?? 'flouci',
-      transaction_record: input.transaction_record,
+      transaction_record: input.transaction_record ?? null,
       plan_type: input.plan_type,
-      createdAt: Date.now(),
-      updatedAt: Date.now()
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
     };
-    this.subscriptions$.next([sub, ...this.subscriptions$.value]);
 
-    // Link to promo & commission if applicable
-    if (sub.promocode_id) {
-      const promos = this.promoCodes$.value;
-      const p = promos.find(x => x.id === sub.promocode_id);
-      if (p) {
-        p.redemption_count += 1;
-        p.updatedAt = Date.now();
-        this.promoCodes$.next([...promos]);
+    const subRef = await addDoc(subsRef, payload);
 
-        if (p.assigned_agent_id) {
-          const commission: AgentPromoCodeCommission = {
-            id: 'cm_' + crypto.randomUUID(),
-            agent_id: p.assigned_agent_id,
-            promocode_id: p.id,
-            subscription_id: sub.id,
+    if (input.promocode_id) {
+      const promoRef = doc(this.firestore!, 'promocodes', input.promocode_id);
+      await updateDoc(promoRef, {
+        redemption_count: increment(1),
+        updatedAt: serverTimestamp(),
+      });
+
+      const promoSnap = await getDoc(promoRef);
+      if (promoSnap.exists()) {
+        const promoData = promoSnap.data() as any;
+        const assignedAgent = promoData['assigned_agent_id'];
+        if (assignedAgent) {
+          const commissionAmount = PLAN_PRICES[input.plan_type] * COMMISSION_RATE;
+          await addDoc(collection(this.firestore!, 'agent_promocode_commissions'), {
+            agent_id: assignedAgent,
+            promocode_id: input.promocode_id,
+            subscription_id: subRef.id,
             commission_status: 'unpaid',
-            amount: PLAN_PRICES[sub.plan_type] * COMMISSION_RATE,
+            amount: commissionAmount,
             currency: 'USD',
-            createdAt: sub.start_date,
-            updatedAt: Date.now()
-          };
-          this.commissions$.next([commission, ...this.commissions$.value]);
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
         }
       }
     }
 
-    return of(sub);
+    return {
+      id: subRef.id,
+      promocode_id: input.promocode_id,
+      primary_email: normalizedEmail,
+      status: input.status ?? 'active',
+      start_date: input.start_date ?? now,
+      end_date: input.end_date,
+      payment_method: input.payment_method ?? 'flouci',
+      transaction_record: input.transaction_record,
+      plan_type: input.plan_type,
+      createdAt: now,
+      updatedAt: now,
+    };
   }
 
   setCommissionStatus(ids: string[], status: CommissionStatus): Observable<void> {
-    const list = this.commissions$.value.map(c => ids.includes(c.id) ? { ...c, commission_status: status, updatedAt: Date.now() } : c);
-    this.commissions$.next(list);
-    return of(void 0);
+    if (!this.firestore) {
+      const list = this.commissions$.value.map((c) =>
+        ids.includes(c.id) ? { ...c, commission_status: status, updatedAt: Date.now() } : c
+      );
+      this.commissions$.next(list);
+      return of(void 0);
+    }
+
+    const updates = ids.map((id) =>
+      updateDoc(doc(this.firestore!, 'agent_promocode_commissions', id), {
+        commission_status: status,
+        updatedAt: serverTimestamp(),
+      })
+    );
+    return from(Promise.all(updates)).pipe(map(() => void 0));
   }
 
   // Metrics helpers
@@ -214,4 +603,3 @@ export class AdminDataService {
     );
   }
 }
-
