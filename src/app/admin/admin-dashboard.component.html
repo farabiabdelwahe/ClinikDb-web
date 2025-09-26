@@ -305,6 +305,7 @@
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Discount</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Redemptions</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -315,6 +316,16 @@
                 <td class="px-6 py-3 text-slate-700">{{ p.discount_type==='percentage' ? (p.discount_value+'%') : (p.discount_value | currency:'USD') }}</td>
                 <td class="px-6 py-3 text-slate-700">{{ p.redemption_count }}</td>
                 <td class="px-6 py-3"><span class="px-2 py-1 rounded text-xs" [class.bg-green-100]="p.status==='active'" [class.text-green-700]="p.status==='active'" [class.bg-slate-100]="p.status!=='active'">{{ p.status }}</span></td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center justify-end gap-2">
+                    <button type="button" class="btn-icon" (click)="openEditPromo(p)" aria-label="Edit promo">
+                      <lucide-angular [img]="IEdit" size="16"></lucide-angular>
+                    </button>
+                    <button type="button" class="btn-icon" (click)="deletePromo(p)" aria-label="Delete promo">
+                      <lucide-angular [img]="ITrash" size="16"></lucide-angular>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </ng-container>
           </tbody>
@@ -333,6 +344,7 @@
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Promo</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Status</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Started</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -343,6 +355,16 @@
                 <td class="px-6 py-3">{{ promoCodeLabel(s.promocode_id, (promoCodes$|async)) || '—' }}</td>
                 <td class="px-6 py-3">{{ s.status }}</td>
                 <td class="px-6 py-3 text-slate-500">{{ s.start_date | date:'medium' }}</td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center justify-end gap-2">
+                    <button type="button" class="btn-icon" (click)="openEditSubscription(s)" aria-label="Edit subscription">
+                      <lucide-angular [img]="IEdit" size="16"></lucide-angular>
+                    </button>
+                    <button type="button" class="btn-icon" (click)="deleteSubscription(s)" aria-label="Delete subscription">
+                      <lucide-angular [img]="ITrash" size="16"></lucide-angular>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </ng-container>
           </tbody>
@@ -397,6 +419,7 @@
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Name</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Email</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Joined</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -404,6 +427,16 @@
               <td class="px-6 py-3 font-medium">{{ a.displayName }}</td>
               <td class="px-6 py-3">{{ a.email || '—' }}</td>
               <td class="px-6 py-3 text-slate-500">{{ a.createdAt | date:'mediumDate' }}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center justify-end gap-2">
+                  <button type="button" class="btn-icon" (click)="openEditAgent(a)" aria-label="Edit agent">
+                    <lucide-angular [img]="IEdit" size="16"></lucide-angular>
+                  </button>
+                  <button type="button" class="btn-icon" (click)="deleteAgent(a)" aria-label="Delete agent">
+                    <lucide-angular [img]="ITrash" size="16"></lucide-angular>
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -415,6 +448,7 @@
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Doctor</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Email</th>
               <th class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Joined</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -422,11 +456,143 @@
               <td class="px-6 py-3 font-medium">{{ d.displayName }}</td>
               <td class="px-6 py-3">{{ d.email }}</td>
               <td class="px-6 py-3 text-slate-500">{{ d.createdAt | date:'mediumDate' }}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center justify-end gap-2">
+                  <button type="button" class="btn-icon" (click)="openEditDoctor(d)" aria-label="Edit doctor">
+                    <lucide-angular [img]="IEdit" size="16"></lucide-angular>
+                  </button>
+                  <button type="button" class="btn-icon" (click)="deleteDoctor(d)" aria-label="Delete doctor">
+                    <lucide-angular [img]="ITrash" size="16"></lucide-angular>
+                  </button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
+    
+    <div *ngIf="activeEditor" class="fixed inset-0 z-30">
+      <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" (click)="closeEditor()"></div>
+      <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
+        <div class="flex h-full flex-col">
+          <header class="flex items-start justify-between gap-4 border-b border-slate-100 px-6 py-5">
+            <div>
+              <div class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-500">Quick Edit</div>
+              <h3 class="mt-1 text-lg font-semibold text-slate-900">{{ activeEditor.title }}</h3>
+            </div>
+            <button type="button" class="btn-icon" (click)="closeEditor()" aria-label="Close editor">
+              <lucide-angular [img]="IClose" size="16"></lucide-angular>
+            </button>
+          </header>
+          <div class="flex-1 overflow-y-auto px-6 py-6">
+            <ng-container [ngSwitch]="activeEditor.type">
+              <form *ngSwitchCase="'promo'" class="space-y-4" (ngSubmit)="savePromoEdit()">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Code
+                  <input [(ngModel)]="editPromoForm.code" name="editPromoCode" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                    Discount type
+                    <select [(ngModel)]="editPromoForm.discount_type" name="editPromoType" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                      <option value="percentage">Percentage</option>
+                      <option value="fixed">Fixed amount</option>
+                    </select>
+                  </label>
+                  <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                    Discount value
+                    <input [(ngModel)]="editPromoForm.discount_value" name="editPromoValue" type="number" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                  </label>
+                </div>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Assign to agent
+                  <select [(ngModel)]="editPromoForm.assigned_agent_id" name="editPromoAgent" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option [ngValue]="undefined">Unassigned</option>
+                    <option *ngFor="let a of (agents$ | async)" [value]="a.id">{{ a.displayName }}</option>
+                  </select>
+                </label>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Status
+                  <select [(ngModel)]="editPromoForm.status" name="editPromoStatus" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </label>
+                <div class="flex justify-end gap-3 pt-4">
+                  <button type="button" class="btn btn-secondary" (click)="closeEditor()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+
+              <form *ngSwitchCase="'subscription'" class="space-y-4" (ngSubmit)="saveSubscriptionEdit()">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Clinic email
+                  <input [(ngModel)]="editSubscriptionForm.primary_email" name="editSubEmail" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                    Plan type
+                    <select [(ngModel)]="editSubscriptionForm.plan_type" name="editSubPlan" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                      <option value="basic">Basic</option>
+                      <option value="pro">Pro</option>
+                      <option value="enterprise">Enterprise</option>
+                    </select>
+                  </label>
+                  <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                    Status
+                    <select [(ngModel)]="editSubscriptionForm.status" name="editSubStatus" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                      <option *ngFor="let status of subscriptionStatuses" [value]="status">{{ status | titlecase }}</option>
+                    </select>
+                  </label>
+                </div>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Promo code
+                  <select [(ngModel)]="editSubscriptionForm.promocode_id" name="editSubPromo" class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option [ngValue]="undefined">No promo</option>
+                    <option *ngFor="let p of (promoCodes$ | async)" [value]="p.id">{{ p.code }}</option>
+                  </select>
+                </label>
+                <div class="flex justify-end gap-3 pt-4">
+                  <button type="button" class="btn btn-secondary" (click)="closeEditor()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+
+              <form *ngSwitchCase="'agent'" class="space-y-4" (ngSubmit)="saveAgentEdit()">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Agent name
+                  <input [(ngModel)]="editAgentForm.displayName" name="editAgentName" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Agent email
+                  <input [(ngModel)]="editAgentForm.email" name="editAgentEmail" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <div class="flex justify-end gap-3 pt-4">
+                  <button type="button" class="btn btn-secondary" (click)="closeEditor()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+
+              <form *ngSwitchCase="'doctor'" class="space-y-4" (ngSubmit)="saveDoctorEdit()">
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Doctor name
+                  <input [(ngModel)]="editDoctorForm.displayName" name="editDoctorName" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+                  Doctor email
+                  <input [(ngModel)]="editDoctorForm.email" name="editDoctorEmail" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200" />
+                </label>
+                <div class="flex justify-end gap-3 pt-4">
+                  <button type="button" class="btn btn-secondary" (click)="closeEditor()">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
       </main>
     </div>
   </div>

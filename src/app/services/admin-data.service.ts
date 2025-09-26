@@ -7,6 +7,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
   serverTimestamp,
   query,
   where,
@@ -532,6 +533,38 @@ export class AdminDataService {
     );
   }
 
+  updatePromoCode(id: string, changes: Partial<Omit<PromoCode, 'id'>>): Observable<void> {
+    if (!this.firestore) {
+      const next = this.promoCodes$.value.map((promo) =>
+        promo.id === id ? { ...promo, ...changes, updatedAt: Date.now() } : promo
+      );
+      this.promoCodes$.next(next);
+      return of(void 0);
+    }
+
+    const sanitized: Record<string, unknown> = { ...changes };
+    if ('assigned_agent_id' in sanitized && sanitized['assigned_agent_id'] === undefined) {
+      sanitized['assigned_agent_id'] = null;
+    }
+    for (const key of Object.keys(sanitized)) {
+      if (sanitized[key] === undefined) {
+        delete sanitized[key];
+      }
+    }
+    sanitized['updatedAt'] = serverTimestamp();
+
+    return from(updateDoc(doc(this.firestore!, 'promocodes', id), sanitized)).pipe(map(() => void 0));
+  }
+
+  deletePromoCode(id: string): Observable<void> {
+    if (!this.firestore) {
+      this.promoCodes$.next(this.promoCodes$.value.filter((promo) => promo.id !== id));
+      return of(void 0);
+    }
+
+    return from(deleteDoc(doc(this.firestore!, 'promocodes', id))).pipe(map(() => void 0));
+  }
+
   onboardSubscription(input: Omit<Subscription, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'start_date'> & { start_date?: number; status?: Subscription['status'] }): Observable<Subscription> {
     if (!this.firestore) {
       const sub: Subscription = {
@@ -645,6 +678,39 @@ export class AdminDataService {
     };
   }
 
+  updateSubscription(id: string, changes: Partial<Omit<Subscription, 'id'>>): Observable<void> {
+    if (!this.firestore) {
+      const next = this.subscriptions$.value.map((sub) =>
+        sub.id === id ? { ...sub, ...changes, updatedAt: Date.now() } : sub
+      );
+      this.subscriptions$.next(next);
+      return of(void 0);
+    }
+
+    const sanitized: Record<string, unknown> = { ...changes };
+    if ('promocode_id' in sanitized && sanitized['promocode_id'] === undefined) {
+      sanitized['promocode_id'] = null;
+    }
+    for (const key of Object.keys(sanitized)) {
+      if (sanitized[key] === undefined) {
+        delete sanitized[key];
+      }
+    }
+    sanitized['updatedAt'] = serverTimestamp();
+
+    return from(updateDoc(doc(this.firestore!, 'subscriptions', id), sanitized)).pipe(map(() => void 0));
+  }
+
+  deleteSubscription(id: string): Observable<void> {
+    if (!this.firestore) {
+      this.subscriptions$.next(this.subscriptions$.value.filter((sub) => sub.id !== id));
+      this.commissions$.next(this.commissions$.value.filter((c) => c.subscription_id !== id));
+      return of(void 0);
+    }
+
+    return from(deleteDoc(doc(this.firestore!, 'subscriptions', id))).pipe(map(() => void 0));
+  }
+
   setCommissionStatus(ids: string[], status: CommissionStatus): Observable<void> {
     if (!this.firestore) {
       const list = this.commissions$.value.map((c) =>
@@ -661,6 +727,60 @@ export class AdminDataService {
       })
     );
     return from(Promise.all(updates)).pipe(map(() => void 0));
+  }
+
+  updateAgent(id: string, changes: Partial<Omit<Agent, 'id'>>): Observable<void> {
+    if (!this.firestore) {
+      const next = this.agents$.value.map((agent) =>
+        agent.id === id ? { ...agent, ...changes } : agent
+      );
+      this.agents$.next(next);
+      return of(void 0);
+    }
+
+    const sanitized: Record<string, unknown> = { ...changes };
+    for (const key of Object.keys(sanitized)) {
+      if (sanitized[key] === undefined) {
+        delete sanitized[key];
+      }
+    }
+    return from(updateDoc(doc(this.firestore!, 'agents', id), sanitized)).pipe(map(() => void 0));
+  }
+
+  deleteAgent(id: string): Observable<void> {
+    if (!this.firestore) {
+      this.agents$.next(this.agents$.value.filter((agent) => agent.id !== id));
+      return of(void 0);
+    }
+
+    return from(deleteDoc(doc(this.firestore!, 'agents', id))).pipe(map(() => void 0));
+  }
+
+  updateDoctor(id: string, changes: Partial<Omit<AppUser, 'id' | 'role'>>): Observable<void> {
+    if (!this.firestore) {
+      const next = this.doctors$.value.map((doctor) =>
+        doctor.id === id ? { ...doctor, ...changes } : doctor
+      );
+      this.doctors$.next(next);
+      return of(void 0);
+    }
+
+    const sanitized: Record<string, unknown> = { ...changes };
+    for (const key of Object.keys(sanitized)) {
+      if (sanitized[key] === undefined) {
+        delete sanitized[key];
+      }
+    }
+    return from(updateDoc(doc(this.firestore!, 'users', id), sanitized)).pipe(map(() => void 0));
+  }
+
+  deleteDoctor(id: string): Observable<void> {
+    if (!this.firestore) {
+      this.doctors$.next(this.doctors$.value.filter((doctor) => doctor.id !== id));
+      return of(void 0);
+    }
+
+    return from(deleteDoc(doc(this.firestore!, 'users', id))).pipe(map(() => void 0));
   }
 
   // Metrics helpers

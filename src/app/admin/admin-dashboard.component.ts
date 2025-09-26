@@ -10,7 +10,7 @@ import { PromoCode } from '../models/promocode.model';
 import { Subscription } from '../models/subscription.model';
 import { AgentPromoCodeCommission } from '../models/commission.model';
 import { AppUser } from '../models/app-user.model';
-import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, TrendingUp, BadgePercent } from 'lucide-angular';
+import { LucideAngularModule, LayoutDashboard, Tags, CreditCard, Wallet, Users, TrendingUp, BadgePercent, PenSquare, Trash2, X } from 'lucide-angular';
 import { environment } from '../../environments/environment';
 import dashboardDemo from '../../assets/mock/admin-dashboard-demo.json';
 
@@ -33,6 +33,9 @@ export class AdminDashboardComponent implements OnInit {
   readonly IUsers = Users;
   readonly ITrendingUp = TrendingUp;
   readonly IPercent = BadgePercent;
+  readonly IEdit = PenSquare;
+  readonly ITrash = Trash2;
+  readonly IClose = X;
 
   // Streams
   agents$!: Observable<Agent[]>;
@@ -104,6 +107,15 @@ export class AdminDashboardComponent implements OnInit {
     maintainAspectRatio: false,
     plugins: { legend: { position: 'bottom' } }
   };
+
+  // Edit overlays
+  activeEditor: { type: 'promo' | 'subscription' | 'agent' | 'doctor'; title: string } | null = null;
+  editPromoForm: Partial<PromoCode> & { id?: string } = {};
+  editSubscriptionForm: Partial<Subscription> & { id?: string } = {};
+  editAgentForm: Partial<Agent> & { id?: string } = {};
+  editDoctorForm: Partial<AppUser> & { id?: string } = {};
+
+  readonly subscriptionStatuses: Subscription['status'][] = ['active', 'inactive', 'expired'];
 
   ngOnInit(): void {
     this.agents$ = this.data.getAgents();
@@ -211,5 +223,117 @@ export class AdminDashboardComponent implements OnInit {
       },
       error: (err) => console.error('Failed to invite doctor', err),
     });
+  }
+
+  // Editor helpers
+  openEditPromo(promo: PromoCode): void {
+    this.editPromoForm = { ...promo };
+    this.activeEditor = { type: 'promo', title: `Edit ${promo.code}` };
+  }
+
+  savePromoEdit(): void {
+    if (!this.editPromoForm.id) {
+      return;
+    }
+    const { id, ...changes } = this.editPromoForm;
+    this.data.updatePromoCode(id, changes).subscribe({
+      next: () => {
+        this.closeEditor();
+      },
+      error: (err) => console.error('Failed to update promo code', err)
+    });
+  }
+
+  deletePromo(promo: PromoCode): void {
+    if (!confirm(`Delete promo code ${promo.code}?`)) {
+      return;
+    }
+    this.data.deletePromoCode(promo.id).subscribe({
+      error: (err) => console.error('Failed to delete promo code', err)
+    });
+  }
+
+  openEditSubscription(sub: Subscription): void {
+    this.editSubscriptionForm = { ...sub };
+    this.activeEditor = { type: 'subscription', title: `Edit ${sub.primary_email}` };
+  }
+
+  saveSubscriptionEdit(): void {
+    if (!this.editSubscriptionForm.id) {
+      return;
+    }
+    const { id, ...changes } = this.editSubscriptionForm;
+    this.data.updateSubscription(id, changes).subscribe({
+      next: () => this.closeEditor(),
+      error: (err) => console.error('Failed to update subscription', err)
+    });
+  }
+
+  deleteSubscription(sub: Subscription): void {
+    if (!confirm(`Delete subscription for ${sub.primary_email}?`)) {
+      return;
+    }
+    this.data.deleteSubscription(sub.id).subscribe({
+      error: (err) => console.error('Failed to delete subscription', err)
+    });
+  }
+
+  openEditAgent(agent: Agent): void {
+    this.editAgentForm = { ...agent };
+    this.activeEditor = { type: 'agent', title: `Edit ${agent.displayName}` };
+  }
+
+  saveAgentEdit(): void {
+    if (!this.editAgentForm.id) {
+      return;
+    }
+    const { id, ...changes } = this.editAgentForm;
+    this.data.updateAgent(id, changes).subscribe({
+      next: () => this.closeEditor(),
+      error: (err) => console.error('Failed to update agent', err)
+    });
+  }
+
+  deleteAgent(agent: Agent): void {
+    if (!confirm(`Remove agent ${agent.displayName}?`)) {
+      return;
+    }
+    this.data.deleteAgent(agent.id).subscribe({
+      error: (err) => console.error('Failed to delete agent', err)
+    });
+  }
+
+  openEditDoctor(doctor: AppUser): void {
+    this.editDoctorForm = { ...doctor };
+    this.activeEditor = { type: 'doctor', title: `Edit ${doctor.displayName}` };
+  }
+
+  saveDoctorEdit(): void {
+    if (!this.editDoctorForm.id) {
+      return;
+    }
+    const { id, ...rest } = this.editDoctorForm;
+    const { role: _role, ...changes } = rest;
+    this.data.updateDoctor(id, changes).subscribe({
+      next: () => this.closeEditor(),
+      error: (err) => console.error('Failed to update doctor', err)
+    });
+  }
+
+  deleteDoctor(doctor: AppUser): void {
+    if (!confirm(`Remove doctor ${doctor.displayName}?`)) {
+      return;
+    }
+    this.data.deleteDoctor(doctor.id).subscribe({
+      error: (err) => console.error('Failed to delete doctor', err)
+    });
+  }
+
+  closeEditor(): void {
+    this.activeEditor = null;
+    this.editPromoForm = {};
+    this.editSubscriptionForm = {};
+    this.editAgentForm = {};
+    this.editDoctorForm = {};
   }
 }
