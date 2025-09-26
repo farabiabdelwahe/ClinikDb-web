@@ -1,4 +1,6 @@
 // International (non-Tunisia) environment configuration
+import { defaultFirebaseConfig } from "./firebase-defaults";
+
 const env = (import.meta as any)?.env || {};
 
 export const environment = {
@@ -18,28 +20,33 @@ export const environment = {
   // exceptions when a service is not enabled for intl version.
   firebase: {
     apiKey:
-      env.NG_APP_FIREBASE_API_KEY_INTL || env.NG_APP_FIREBASE_API_KEY || "",
+      env.NG_APP_FIREBASE_API_KEY_INTL ||
+      env.NG_APP_FIREBASE_API_KEY ||
+      defaultFirebaseConfig.apiKey,
     authDomain:
       env.NG_APP_FIREBASE_AUTH_DOMAIN_INTL ||
       env.NG_APP_FIREBASE_AUTH_DOMAIN ||
-      "",
+      defaultFirebaseConfig.authDomain,
     projectId:
       env.NG_APP_FIREBASE_PROJECT_ID_INTL ||
       env.NG_APP_FIREBASE_PROJECT_ID ||
-      "",
+      defaultFirebaseConfig.projectId,
     storageBucket:
       env.NG_APP_FIREBASE_STORAGE_BUCKET_INTL ||
       env.NG_APP_FIREBASE_STORAGE_BUCKET ||
-      "",
+      defaultFirebaseConfig.storageBucket,
     messagingSenderId:
       env.NG_APP_FIREBASE_MESSAGING_SENDER_ID_INTL ||
       env.NG_APP_FIREBASE_MESSAGING_SENDER_ID ||
-      "",
-    appId: env.NG_APP_FIREBASE_APP_ID_INTL || env.NG_APP_FIREBASE_APP_ID || "",
+      defaultFirebaseConfig.messagingSenderId,
+    appId:
+      env.NG_APP_FIREBASE_APP_ID_INTL ||
+      env.NG_APP_FIREBASE_APP_ID ||
+      defaultFirebaseConfig.appId,
     measurementId:
       env.NG_APP_FIREBASE_MEASUREMENT_ID_INTL ||
       env.NG_APP_FIREBASE_MEASUREMENT_ID ||
-      "",
+      defaultFirebaseConfig.measurementId,
   },
 
   // Versioning – optionally overridden at build time
